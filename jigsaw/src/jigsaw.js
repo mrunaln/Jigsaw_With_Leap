@@ -1,11 +1,11 @@
-var zindex = 15;
+var zindex = 0;
 
-var controllerOptions = { enableGestures: true }
-    canvas = d3.select('div#inner_wrapper')
+var controllerOptions = { enableGestures: true },
+   canvas = d3.select('div#wrapper_container') 
                 .append('canvas')
                 .attr({
-                        "width": '500px',
-                        "height": '500px',
+                        "width": screen.width,
+                        "height": screen.height,
                         "z-index" : zindex
                     }).node(),
 
@@ -14,8 +14,10 @@ var controllerOptions = { enableGestures: true }
  ctx.translate(canvas.width,canvas.height);
  ctx.fillStyle = "rgba(0,0,0,0.7)";
 
+
 // render each frame
 function draw(obj) {
+    
   // clear last frame
   ctx.clearRect(-canvas.width,-canvas.height,canvas.width,canvas.height);
 
@@ -33,33 +35,32 @@ function draw(obj) {
    }
 };
 
-/*
-
-function draw() {
-      var a, b;
-
-      for (var id in after) {
-        b = before[id],
-        a = after[id];
-        if (!b) continue;
-        ctx.strokeStyle = color(id);
-        ctx.moveTo(b.tipPosition[0], -b.tipPosition[1]);
-        ctx.lineTo(a.tipPosition[0], -a.tipPosition[1]);
-        ctx.stroke();
-        ctx.beginPath();
-      }
-      before = after;
-      return true;
-}
-
-Leap.loop(controllerOptions, function(frame, done) {
-      after = {};
-      for (var i = 0; i < frame.pointables.length; i++) {
-        after[frame.pointables[i].id] = frame.pointables[i];
-      }
-      draw();
-      done();
+$(document).ready(function(){
+  $("#jumble").click(function(){
+         //alert("jumble button was clicked");
+         document.getElementById('jumbled_jigsaw_image_1').src = "/samplePuzzles/Uncle_Scrooge_pieces/4.jpg";
+         document.getElementById('jumbled_jigsaw_image_2').src = "/samplePuzzles/Uncle_Scrooge_pieces/3.jpg";
+         document.getElementById('jumbled_jigsaw_image_3').src = "/samplePuzzles/Uncle_Scrooge_pieces/2.jpg";
+         document.getElementById('jumbled_jigsaw_image_4').src = "/samplePuzzles/Uncle_Scrooge_pieces/1.jpg";
+         document.getElementById('jumble').disabled = 'true'
+  });
+    
+  drawImage("1.jpg", "canvas_1");
+  drawImage("2.jpg", "canvas_2");
+  drawImage("3.jpg", "canvas_3");
+  drawImage("4.jpg", "canvas_4");
+    
+    
 });
-*/
+
+function drawImage(imageSrc, canvasID){
+    var img=document.createElement("img");
+    img.src= "/samplePuzzles/Uncle_Scrooge_pieces/" + imageSrc;
+    img.style.display = "none";
+    var canvas = document.getElementById(canvasID);
+    var context = canvas.getContext('2d');
+    canvas.appendChild(img);
+    context.drawImage(img, 0, 0,canvas.width, canvas.height);
+}
 
 Leap.loop(draw);

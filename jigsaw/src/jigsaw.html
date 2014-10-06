@@ -3,8 +3,49 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <style>
-      body { width:960px; margin: 10px auto; font:normal 14px/20px 'Georgia', serif; }
-      .center { text-align: center; }
+      body 
+      { 
+        width:960px; 
+        margin: 10px auto; 
+        font:normal 14px/20px 'Georgia', serif; 
+      }
+      .center 
+      { 
+        text-align: center; 
+      }
+
+      .puzzleTitle
+      {
+        width: 400px; 
+        height: 400px; 
+        float:left; 
+        display:inline-block;
+      }
+
+      .individualPieces
+      {
+        width : 190px;
+        height: 120px;
+        float:left; 
+        display:inline-block;
+        
+      }
+      .solutionBoardInnerWrapperStyle
+      {
+        height: 250px; 
+        width : 400px; 
+        z-index : 10;
+      }
+      .solutionBoardContainerStyle
+      {
+
+        display: inline-block; 
+        float : right; 
+        //background: yellow
+      }
+
+
+
     </style>
     <title>Jigsaw Demo</title>
     <link rel="icon" ref="favicon.ico" type="image/x-icon">
@@ -12,24 +53,59 @@
   
   <body>
     <div id="wrapper_container" >
-      
-      
-        <p class='center' style = "font-size:200%">Basic Jigsaw Puzzle with leap</p>
-          <div id="Goal" style="width: 400px; height:400px float: left; display:inline-block">
-                <h2>Given Bell Puzzle</h2>
-                <img src="bell_puzzle.gif" alt="Bell Puzzle" style="width:300px;height:410px">
-                <button type="jumblebutton" style="width : 200px; height : 50px ; font-size: 200%">Jumble!</button>
+        <p class='center' style = "font-size:200%">
+           Basic Jigsaw Puzzle with leap
+        </p>
+          <div id="Goal_Pieces" class="puzzleTitle">
+             <h2>Uncle Scrooge Puzzle</h2>
+             
+             <div id="piece_1" class="individualPieces">
+                <img id = "jumbled_jigsaw_image_1" src="/samplePuzzles/Uncle_Scrooge_pieces/1.jpg" alt="Uncle1 Puzzle" >
+             </div>
+                
+             <div id="piece_2" class="individualPieces">
+                <img id = "jumbled_jigsaw_image_2" src="/samplePuzzles/Uncle_Scrooge_pieces/2.jpg" alt="Uncle2 Puzzle">
+             </div>
+          
+             <div id="piece_3" class="individualPieces">
+                <img id = "jumbled_jigsaw_image_3" src="/samplePuzzles/Uncle_Scrooge_pieces/3.jpg" alt="Uncle3 Puzzle">
+             </div>
+                
+             <div id="piece_4" class="individualPieces">
+                <img id = "jumbled_jigsaw_image_4" src="/samplePuzzles/Uncle_Scrooge_pieces/4.jpg" alt="Uncle4 Puzzle">
+             </div>
+                
+              <button id="jumble" type="button" style="width : 200px; height : 50px ; font-size: 200%">Jumble!</button>
+                
           </div>
+
               
-          <div id="container" style="display: inline-block; float : right; background: yellow">
+          <div id="container" class="solutionBoardContainerStyle">
               <h2> Solution board</h2>
-              <div id="inner_wrapper" style="height: 500px; width : 500px; z-index : 10;">
+              <div id="inner_wrapper" class="solutionBoardInnerWrapperStyle">
+              
+              <canvas id = "canvas_1" class="individualPieces" style = "border:1px solid blue;">
+              </canvas>
+
+              <canvas id = "canvas_2" class="individualPieces" style = "border:1px solid blue;">
+              </canvas>
+
+              <canvas id = "canvas_3" class="individualPieces" style = "border:1px solid blue;">
+              </canvas>
+              
+              <canvas id = "canvas_4" class="individualPieces" style = "border:1px solid blue;">
+              </canvas>
+
               </div>
           </div>
       
       </div>
-    <script src="//js.leapmotion.com/0.2.0-beta1/leap.min.js"></script>
+
+
+
+    <script src="//js.leapmotion.com/leap-0.6.2.min.js"></script>
     <script src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/109794/d3.v3.js'></script>
-    <script src='jigsaw.js'></script>
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>    
+    <script src='jigsaw.js' type="text/javascript"></script>
   </body>
 </html>
