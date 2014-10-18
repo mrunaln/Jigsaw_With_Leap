@@ -28,7 +28,14 @@
         height: 120px;
         float:left; 
         display:inline-block;
-        
+      }
+
+      .hiddenIndividualPieces
+      {
+        width : 190px;
+        height: 120px;
+        float:left;
+        display:none;
       }
       .solutionBoardInnerWrapperStyle
       {
@@ -84,16 +91,20 @@
               <h2> Solution board</h2>
               <div id="inner_wrapper" class="solutionBoardInnerWrapperStyle">
               
-              <canvas id = "canvas_1" class="individualPieces" style = "border:1px solid blue;">
+              <canvas id = "canvas_1"
+              class="hiddenIndividualPieces" style = "border:1px solid blue;">
               </canvas>
 
-              <canvas id = "canvas_2" class="individualPieces" style = "border:1px solid blue;">
+              <canvas id = "canvas_2"
+              class="hiddenIndividualPieces" style = "border:1px solid blue;">
               </canvas>
 
-              <canvas id = "canvas_3" class="individualPieces" style = "border:1px solid blue;">
+              <canvas id = "canvas_3"
+              class="hiddenIndividualPieces" style = "border:1px solid blue;">
               </canvas>
               
-              <canvas id = "canvas_4" class="individualPieces" style = "border:1px solid blue;">
+              <canvas id = "canvas_4"
+              class="hiddenIndividualPieces" style = "border:1px solid blue;">
               </canvas>
 
               </div>
