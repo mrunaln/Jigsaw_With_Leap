@@ -43,20 +43,29 @@ $(document).ready(function(){
          document.getElementById('jumbled_jigsaw_image_3').src = "/samplePuzzles/Uncle_Scrooge_pieces/2.jpg";
          document.getElementById('jumbled_jigsaw_image_4').src = "/samplePuzzles/Uncle_Scrooge_pieces/1.jpg";
          document.getElementById('jumble').disabled = 'true'
+    
+         hideSolution('solution_image_1');
+         hideSolution('solution_image_2');
+         hideSolution('solution_image_3');
+         hideSolution('solution_image_4');
   });
     
-  drawImage("1.jpg", "canvas_1");
-  drawImage("2.jpg", "canvas_2");
-  drawImage("3.jpg", "canvas_3");
-  drawImage("4.jpg", "canvas_4");
+  drawImage("1", "canvas_1");
+  drawImage("2", "canvas_2");
+  drawImage("3", "canvas_3");
+  drawImage("4", "canvas_4");
     
     
 });
 
+function hideSolution(id){
+   $('#'+id).parent().addClass("hiddenIndividualPieces");
+}
+
 function drawImage(imageSrc, canvasID){
     var img=document.createElement("img");
-    img.src= "/samplePuzzles/Uncle_Scrooge_pieces/" + imageSrc;
-    img.style.display = "none";
+    img.id = "solution_image_" + imageSrc;
+    img.src= "/samplePuzzles/Uncle_Scrooge_pieces/" + imageSrc + ".jpg";
     var canvas = document.getElementById(canvasID);
     var context = canvas.getContext('2d');
     canvas.appendChild(img);
