@@ -28,8 +28,12 @@
         height: 120px;
         float:left; 
         display:inline-block;
+      
       }
 
+      .borderPieces{
+        border:1px solid blue;
+      }
       .hiddenIndividualPieces
       {
         width : 190px;
@@ -51,7 +55,15 @@
         //background: yellow
       }
 
+      #canvas {
+        position: absolute;
+        z-index: 100;
+      }
 
+      #wrapper_container {
+        position: absolute;
+        z-index: 50;
+      }
 
     </style>
     <title>Jigsaw Demo</title>
@@ -59,7 +71,9 @@
   </head>
   
   <body>
+    <canvas id="canvas"></canvas>
     <div id="wrapper_container" >
+
         <p class='center' style = "font-size:200%">
            Basic Jigsaw Puzzle with leap
         </p>
@@ -92,25 +106,25 @@
               <div id="inner_wrapper" class="solutionBoardInnerWrapperStyle">
               
               <canvas id = "canvas_1"
-              class="individualPieces" style = "border:1px solid blue;">
+              class="individualPieces borderPieces">
               </canvas>
 
               <canvas id = "canvas_2"
-              class="individualPieces" style = "border:1px solid blue;">
+              class="individualPieces borderPieces">
               </canvas>
 
               <canvas id = "canvas_3"
-              class="individualPieces" style = "border:1px solid blue;">
+              class="individualPieces borderPieces" >
               </canvas>
               
               <canvas id = "canvas_4"
-              class="individualPieces" style = "border:1px solid blue;">
+              class="individualPieces borderPieces">
               </canvas>
 
               </div>
           </div>
-      
-      </div>
+        
+    </div>
 
 
 
