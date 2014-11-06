@@ -1,5 +1,15 @@
+
+//canvas is used for drawing cursors.
 var canvas = document.getElementById("canvas");
+// canvasTest used for drawing static circle currently
 var canvasTest = document.getElementById("canvasTest");
+
+// Done simple test to cat this cat image on 0,0 location. Works !
+//var cat = new Image();
+//cat.src = "/samplePuzzles/Uncle_Scrooge_pieces/1.jpg"
+
+
+
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -7,7 +17,7 @@ width = window.innerWidth;
 height = window.innerHeight;
 // create a rendering context
 var ctx = canvas.getContext("2d");
-ctx.translate(canvas.width/2,canvas.height);
+//ctx.translate(canvas.width/2,canvas.height);
 ctx.fillStyle = "rgba(0,0,0,0.7)";
 
 /*
@@ -18,7 +28,7 @@ CanvasTest for drawing the picture(currently staticCircle) only when keytaps occ
 canvasTest.width = window.innerWidth;
 canvasTest.height = window.innerHeight;
 var ctxTest = canvasTest.getContext("2d");
-ctxTest.translate(canvasTest.width/2,canvasTest.height);
+//ctxTest.translate(canvasTest.width/2,canvasTest.height);
 var currentCursorPosX;
 var currentCursorPosY;
 var keyTap = 0;
@@ -26,7 +36,7 @@ var keyTap = 0;
 // render each frame
 function drawCursor(obj)
 {
-  ctx.clearRect(-canvas.width/2,-canvas.height,canvas.width,canvas.height);
+   ctx.clearRect(-canvas.width/2,-canvas.height,canvas.width,canvas.height);
    var X , Y;
    // render circles based on pointable positions
    var pointablesMap = obj.pointablesMap;
@@ -64,6 +74,9 @@ function drawCursor(obj)
 };
 
 $(document).ready(function(){
+
+   //ctxTest.drawImage(cat, 0, 0);
+   drawJumbleButton(0,0,200,100)
   $("#jumble").click(function(){
          //alert("jumble button was clicked");
          document.getElementById('jumbled_jigsaw_image_1').src = "/samplePuzzles/Uncle_Scrooge_pieces/4.jpg";
@@ -95,6 +108,33 @@ function drawMyStaticCircle(X, Y, color){
   ctxTest.stroke();
 }
 
+/*
+Jumble button story:
+Drawing jumble button on the canvasTest
+Once the button is pressed. It will disappear
+Draw button till it is pressed.
+Until the jumble button is not pressed the game cannot start.
+So pieces cannot move.
+Show msg press jumble to start your game.
+*/
+
+function drawJumbleButton(x, y, w, h) {
+  ctxTest.beginPath();
+  ctxTest.lineWidth="10";
+  ctxTest.strokeStyle="blue";
+  ctxTest.rect(0,400,175,80); // x= 0 y = 400 width = 175 h = 80
+  ctxTest.stroke();
+  ctxTest.font = "20px Arial";
+  ctxTest.fillText("Press to Jumble",10,450);
+}
+
+
+function jumbleButtonClick(){
+  var left = 0 //x
+  var right = 0 + 175
+  var top = 400 //y
+  var bottom = 400 + 80
+}
 
 function hideSolution(id){
   $('#'+id).parent().removeClass("individualPieces");
