@@ -34,6 +34,7 @@ ctxTest.translate(canvasTest.width/2,canvasTest.height);
 var currentCursorPosX;
 var currentCursorPosY;
 var keyTap = 0;
+var isJumbleClickedThenStartJigsaw = 0;
 
 // render each frame
 function drawCursor(obj)
@@ -143,6 +144,7 @@ function jumbleButtonClick(x, y){
             && bottom >= y
             && top <= y) 
   {
+            isJumbleClickedThenStartJigsaw = 1;
             console.log("JUMBLE CLICKED ! ");
   }
 }
@@ -198,17 +200,20 @@ function drawImage(imageSrc, canvasID){
           //console.log("X = " + currentCursorPosX + "Y = " + currentCursorPosY)
             drawJumbleButton()
             jumbleButtonClick(currentCursorPosX, currentCursorPosY)
-            if(keyTap == 1) // leave the circle at this loc
+            if (isJumbleClickedThenStartJigsaw)
             {
-              keyTap = 0
-              ctxTest.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
-              drawMyStaticCircle(currentCursorPosX, currentCursorPosY, 'red');
-            }
-            else // pickup the circle
-            {
-              keyTap = 1;
-              ctxTest.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
-              drawMyStaticCircle(currentCursorPosX, currentCursorPosY, 'green');
+                if(keyTap == 1) // leave the circle at this loc
+                {
+                  keyTap = 0
+                  ctxTest.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
+                  drawMyStaticCircle(currentCursorPosX, currentCursorPosY, 'red');
+                }
+                else // pickup the circle
+                {
+                  keyTap = 1;
+                  ctxTest.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
+                  drawMyStaticCircle(currentCursorPosX, currentCursorPosY, 'green');
+                }
             }
             console.log ("KEY TAP keyTap = " + keyTap);
             break;
