@@ -10,6 +10,8 @@ var canvasTest = document.getElementById("canvasTest");
 
 
 
+console.log("canvas wdt = " + canvas.width/2 )
+console.log("canvas ht = " + canvas.height )
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -17,7 +19,7 @@ width = window.innerWidth;
 height = window.innerHeight;
 // create a rendering context
 var ctx = canvas.getContext("2d");
-//ctx.translate(canvas.width/2,canvas.height);
+ctx.translate(canvas.width/2,canvas.height);
 ctx.fillStyle = "rgba(0,0,0,0.7)";
 
 /*
@@ -28,7 +30,7 @@ CanvasTest for drawing the picture(currently staticCircle) only when keytaps occ
 canvasTest.width = window.innerWidth;
 canvasTest.height = window.innerHeight;
 var ctxTest = canvasTest.getContext("2d");
-//ctxTest.translate(canvasTest.width/2,canvasTest.height);
+ctxTest.translate(canvasTest.width/2,canvasTest.height);
 var currentCursorPosX;
 var currentCursorPosY;
 var keyTap = 0;
@@ -118,23 +120,33 @@ So pieces cannot move.
 Show msg press jumble to start your game.
 */
 
-function drawJumbleButton(x, y, w, h) {
+function drawJumbleButton() {
   ctxTest.beginPath();
   ctxTest.lineWidth="10";
   ctxTest.strokeStyle="blue";
-  ctxTest.rect(0,400,175,80); // x= 0 y = 400 width = 175 h = 80
+  ctxTest.rect(-650,-300,575,80); // x= 0 y = 400 width = 175 h = 80
+    //Bcuz of ctx translate  x= -650 y = -300 width = 175 h = 80
   ctxTest.stroke();
-  ctxTest.font = "20px Arial";
-  ctxTest.fillText("Press to Jumble",10,450);
+  ctxTest.font = "30px Arial";
+  ctxTest.fillText("Press to Jumble",-450,-250);
 }
 
 
-function jumbleButtonClick(){
-  var left = 0 //x
-  var right = 0 + 175
-  var top = 400 //y
-  var bottom = 400 + 80
+function jumbleButtonClick(x, y){
+  var left = -650 //x
+  var right = -650 + 575
+  var top = -300 //y
+  var bottom = -300 + 80
+
+  if (right >= x
+            && left <= x
+            && bottom >= y
+            && top <= y) 
+  {
+            console.log("JUMBLE CLICKED ! ");
+  }
 }
+
 
 function hideSolution(id){
   $('#'+id).parent().removeClass("individualPieces");
@@ -183,13 +195,16 @@ function drawImage(imageSrc, canvasID){
         {
           case "screenTap":
           case "keyTap":
-            if(keyTap == 1)
+          //console.log("X = " + currentCursorPosX + "Y = " + currentCursorPosY)
+            drawJumbleButton()
+            jumbleButtonClick(currentCursorPosX, currentCursorPosY)
+            if(keyTap == 1) // leave the circle at this loc
             {
               keyTap = 0
               ctxTest.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
               drawMyStaticCircle(currentCursorPosX, currentCursorPosY, 'red');
             }
-            else
+            else // pickup the circle
             {
               keyTap = 1;
               ctxTest.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
