@@ -86,19 +86,31 @@ function drawCursor(obj)
 function initPuzzle()
 {
    leftTop.onload = function() {
-      ctxTest.drawImage(leftTop, -661, -596,190,120); // left top piece
+      ctxTest.drawImage(leftTop, -662, -595,190,120); // left top piece
+      drawBordersToPieces(-662,-595);
+
    }
    rightTop.onload = function() {
       ctxTest.drawImage(rightTop, -471, -596,190,120); // right top piece
+      drawBordersToPieces(-471,-596);
    }
    leftBottom.onload = function() {
-      ctxTest.drawImage(leftBottom, -661, -480,190,120); // right bottom piece
+      ctxTest.drawImage(leftBottom, -662, -475,190,120); // right bottom piece
+      drawBordersToPieces(-662,-475);
    }
    rightBottom.onload = function() {
-      ctxTest.drawImage(rightBottom, -471, -480,190,120); // right bottom piece
+      ctxTest.drawImage(rightBottom, -471, -475,190,120); // right bottom piece
+      drawBordersToPieces(-471,-475);
    }
 }
 
+
+function drawBordersToPieces(X, Y){
+      ctxTest.rect(X, Y,192,122);
+      ctxTest.lineWidth = 2;
+      ctxTest.strokeStyle = 'blue';
+      ctxTest.stroke();
+}
 $(document).ready(function(){
 
    initPuzzle();
@@ -129,10 +141,14 @@ $(document).ready(function(){
 function jumblePieces(){
 
   ctxTest.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
-  ctxTest.drawImage(rightBottom, -661, -596, 190, 120); // left top piece
+  ctxTest.drawImage(rightBottom, -662, -595, 190, 120); // left top piece
+  drawBordersToPieces(-662,-595);
   ctxTest.drawImage(leftBottom,  -471, -596, 190, 120); // right top piece
-  ctxTest.drawImage(rightTop,    -661, -480, 190, 120); // right bottom piece
-  ctxTest.drawImage(leftTop,     -471, -480, 190, 120); // right bottom piece
+  drawBordersToPieces(-471,-596);
+  ctxTest.drawImage(rightTop,    -662, -475, 190, 120); // right bottom piece
+  drawBordersToPieces(-662,-475);
+  ctxTest.drawImage(leftTop,     -471, -475, 190, 120); // right bottom piece
+  drawBordersToPieces(-471,-475);
 }
 function drawMyStaticCircle(X, Y, color){
   ctxTest.beginPath();
