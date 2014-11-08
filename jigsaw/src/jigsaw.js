@@ -112,30 +112,8 @@ function drawBordersToPieces(X, Y){
       ctxTest.stroke();
 }
 $(document).ready(function(){
-
    initPuzzle();
    drawJumbleButton();
-  $("#jumble").click(function(){
-       /*
-         //alert("jumble button was clicked");
-         document.getElementById('jumbled_jigsaw_image_1').src = "/samplePuzzles/Uncle_Scrooge_pieces/4.jpg";
-         document.getElementById('jumbled_jigsaw_image_2').src = "/samplePuzzles/Uncle_Scrooge_pieces/3.jpg";
-         document.getElementById('jumbled_jigsaw_image_3').src = "/samplePuzzles/Uncle_Scrooge_pieces/2.jpg";
-         document.getElementById('jumbled_jigsaw_image_4').src = "/samplePuzzles/Uncle_Scrooge_pieces/1.jpg";
-         document.getElementById('jumble').disabled = 'true'
-    
-         hideSolution('solution_image_1');
-         hideSolution('solution_image_2');
-         hideSolution('solution_image_3');
-         hideSolution('solution_image_4');
-         */
-  });
-  /*
-  drawImage("1", "canvas_1");
-  drawImage("2", "canvas_2");
-  drawImage("3", "canvas_3");
-  drawImage("4", "canvas_4");
-  */
 });
 
 function jumblePieces(){
@@ -205,16 +183,6 @@ function hideSolution(id){
   /*FIXME - i dont know why border class not seen after jumble button pressed.*/
    $('#'+id).parent().addClass("hiddenIndividualPieces");
    
-}
-
-function drawImage(imageSrc, canvasID){
-    var img=document.createElement("img");
-    img.id = "solution_image_" + imageSrc;
-    img.src= "/samplePuzzles/Uncle_Scrooge_pieces/" + imageSrc + ".jpg";
-    var canvas = document.getElementById(canvasID);
-    var context = canvas.getContext('2d');
-    canvas.appendChild(img);
-    context.drawImage(img, 0, 0,canvas.width, canvas.height);
 }
 
 // Creates our Leap Controller
