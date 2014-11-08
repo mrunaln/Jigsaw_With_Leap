@@ -3,16 +3,6 @@
 var canvas = document.getElementById("canvas");
 // canvasTest used for drawing static circle currently
 var canvasTest = document.getElementById("canvasTest");
-
-// Done simple test to cat this cat image on 0,0 location. Works !
-//var cat = new Image();
-//cat.src = "/samplePuzzles/Uncle_Scrooge_pieces/1.jpg"
-
-
-
-console.log("canvas wdt = " + canvas.width/2 )
-console.log("canvas ht = " + canvas.height )
-
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 width = window.innerWidth;
@@ -76,11 +66,42 @@ function drawCursor(obj)
   }
 };
 
+function initPuzzle()
+{
+
+   var leftTop = new Image();
+   leftTop.src = "/samplePuzzles/Uncle_Scrooge_pieces/1.jpg"
+   leftTop.style.display = "inline-block"
+   leftTop.onload = function() {
+      ctxTest.drawImage(leftTop, -661, -596,190,120); // left top piece
+   }
+   var rightTop = new Image();
+   rightTop.src = "/samplePuzzles/Uncle_Scrooge_pieces/2.jpg";
+   rightTop.style.display = "inline-block";
+   rightTop.onload = function() {
+      ctxTest.drawImage(rightTop, -471, -596,190,120); // right top piece
+   }
+   var leftBottom = new Image();
+   leftBottom.src = "/samplePuzzles/Uncle_Scrooge_pieces/3.jpg";
+   leftBottom.style.display = "inline-block";
+   leftBottom.onload = function() {
+      ctxTest.drawImage(leftBottom, -661, -480,190,120); // right bottom piece
+   }
+   var rightBottom = new Image();
+   rightBottom.src = "/samplePuzzles/Uncle_Scrooge_pieces/4.jpg";
+   rightBottom.style.display = "inline-block";
+   rightBottom.onload = function() {
+      ctxTest.drawImage(rightBottom, -471, -480,190,120); // right bottom piece
+   }
+}
+
 $(document).ready(function(){
 
-   //ctxTest.drawImage(cat, 0, 0);
-   drawJumbleButton(0,0,200,100)
+   initPuzzle();
+   drawJumbleButton();
+
   $("#jumble").click(function(){
+       /*
          //alert("jumble button was clicked");
          document.getElementById('jumbled_jigsaw_image_1').src = "/samplePuzzles/Uncle_Scrooge_pieces/4.jpg";
          document.getElementById('jumbled_jigsaw_image_2').src = "/samplePuzzles/Uncle_Scrooge_pieces/3.jpg";
@@ -92,11 +113,14 @@ $(document).ready(function(){
          hideSolution('solution_image_2');
          hideSolution('solution_image_3');
          hideSolution('solution_image_4');
+         */
   });
+  /*
   drawImage("1", "canvas_1");
   drawImage("2", "canvas_2");
   drawImage("3", "canvas_3");
   drawImage("4", "canvas_4");
+  */
 });
 
 
@@ -148,7 +172,6 @@ function jumbleButtonClick(x, y){
             console.log("JUMBLE CLICKED ! ");
   }
 }
-
 
 function hideSolution(id){
   $('#'+id).parent().removeClass("individualPieces");
