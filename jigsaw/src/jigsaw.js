@@ -26,6 +26,23 @@ var currentCursorPosY;
 var keyTap = 0;
 var isJumbleClickedThenStartJigsaw = 0;
 
+var leftTop = new Image();
+leftTop.src = "/samplePuzzles/Uncle_Scrooge_pieces/1.jpg";
+leftTop.style.display = "inline-block";
+
+var rightTop = new Image();
+rightTop.src = "/samplePuzzles/Uncle_Scrooge_pieces/2.jpg";
+rightTop.style.display = "inline-block";
+
+var leftBottom = new Image();
+leftBottom.src = "/samplePuzzles/Uncle_Scrooge_pieces/3.jpg";
+leftBottom.style.display = "inline-block";
+
+var rightBottom = new Image();
+rightBottom.src = "/samplePuzzles/Uncle_Scrooge_pieces/4.jpg";
+rightBottom.style.display = "inline-block";
+
+
 // render each frame
 function drawCursor(obj)
 {
@@ -60,36 +77,23 @@ function drawCursor(obj)
         currentCursorPosX = X;
         currentCursorPosY = Y;
         if(keyTap == 1){
-            ctxTest.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
-            drawMyStaticCircle(currentCursorPosX, currentCursorPosY, 'green');
+            //ctxTest.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
+            //drawMyStaticCircle(currentCursorPosX, currentCursorPosY, 'green');
         }
   }
 };
 
 function initPuzzle()
 {
-
-   var leftTop = new Image();
-   leftTop.src = "/samplePuzzles/Uncle_Scrooge_pieces/1.jpg"
-   leftTop.style.display = "inline-block"
    leftTop.onload = function() {
       ctxTest.drawImage(leftTop, -661, -596,190,120); // left top piece
    }
-   var rightTop = new Image();
-   rightTop.src = "/samplePuzzles/Uncle_Scrooge_pieces/2.jpg";
-   rightTop.style.display = "inline-block";
    rightTop.onload = function() {
       ctxTest.drawImage(rightTop, -471, -596,190,120); // right top piece
    }
-   var leftBottom = new Image();
-   leftBottom.src = "/samplePuzzles/Uncle_Scrooge_pieces/3.jpg";
-   leftBottom.style.display = "inline-block";
    leftBottom.onload = function() {
       ctxTest.drawImage(leftBottom, -661, -480,190,120); // right bottom piece
    }
-   var rightBottom = new Image();
-   rightBottom.src = "/samplePuzzles/Uncle_Scrooge_pieces/4.jpg";
-   rightBottom.style.display = "inline-block";
    rightBottom.onload = function() {
       ctxTest.drawImage(rightBottom, -471, -480,190,120); // right bottom piece
    }
@@ -99,7 +103,6 @@ $(document).ready(function(){
 
    initPuzzle();
    drawJumbleButton();
-
   $("#jumble").click(function(){
        /*
          //alert("jumble button was clicked");
@@ -123,7 +126,14 @@ $(document).ready(function(){
   */
 });
 
+function jumblePieces(){
 
+  ctxTest.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
+  ctxTest.drawImage(rightBottom, -661, -596, 190, 120); // left top piece
+  ctxTest.drawImage(leftBottom,  -471, -596, 190, 120); // right top piece
+  ctxTest.drawImage(rightTop,    -661, -480, 190, 120); // right bottom piece
+  ctxTest.drawImage(leftTop,     -471, -480, 190, 120); // right bottom piece
+}
 function drawMyStaticCircle(X, Y, color){
   ctxTest.beginPath();
   var staticRadius = 140;
@@ -170,6 +180,7 @@ function jumbleButtonClick(x, y){
   {
             isJumbleClickedThenStartJigsaw = 1;
             console.log("JUMBLE CLICKED ! ");
+            jumblePieces();
   }
 }
 
@@ -228,13 +239,13 @@ function drawImage(imageSrc, canvasID){
                 if(keyTap == 1) // leave the circle at this loc
                 {
                   keyTap = 0
-                  ctxTest.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
+                  //ctxTest.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
                   drawMyStaticCircle(currentCursorPosX, currentCursorPosY, 'red');
                 }
                 else // pickup the circle
                 {
                   keyTap = 1;
-                  ctxTest.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
+                  //ctxTest.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
                   drawMyStaticCircle(currentCursorPosX, currentCursorPosY, 'green');
                 }
             }
