@@ -104,7 +104,6 @@ function initPuzzle()
    }
 }
 
-
 function drawBordersToPieces(X, Y){
       ctxTest.rect(X, Y,192,122);
       ctxTest.lineWidth = 2;
@@ -113,7 +112,7 @@ function drawBordersToPieces(X, Y){
 }
 $(document).ready(function(){
    initPuzzle();
-   drawJumbleButton();
+   drawJumbleButton("Click Jumble here");
 });
 
 function jumblePieces(){
@@ -128,6 +127,7 @@ function jumblePieces(){
   ctxTest.drawImage(leftTop,     -471, -475, 190, 120); // right bottom piece
   drawBordersToPieces(-471,-475);
 }
+
 function drawMyStaticCircle(X, Y, color){
   ctxTest.beginPath();
   var staticRadius = 140;
@@ -149,7 +149,7 @@ So pieces cannot move.
 Show msg press jumble to start your game.
 */
 
-function drawJumbleButton() {
+function drawJumbleButton(msg) {
   ctxTest.beginPath();
   ctxTest.lineWidth="10";
   ctxTest.strokeStyle="blue";
@@ -157,11 +157,11 @@ function drawJumbleButton() {
     //Bcuz of ctx translate  x= -650 y = -300 width = 175 h = 80
   ctxTest.stroke();
   ctxTest.font = "30px Arial";
-  ctxTest.fillText("Press to Jumble",-450,-250);
+  ctxTest.fillText(msg,-450,-250);
 }
 
 
-function jumbleButtonClick(x, y){
+function isJumbleButtonClicked(x, y){
   var left = -650 //x
   var right = -650 + 575
   var top = -300 //y
@@ -172,10 +172,10 @@ function jumbleButtonClick(x, y){
             && bottom >= y
             && top <= y) 
   {
-            isJumbleClickedThenStartJigsaw = 1;
             console.log("JUMBLE CLICKED ! ");
-            jumblePieces();
+            return true;
   }
+  return false;
 }
 
 function hideSolution(id){
@@ -216,22 +216,26 @@ function hideSolution(id){
           case "screenTap":
           case "keyTap":
           //console.log("X = " + currentCursorPosX + "Y = " + currentCursorPosY)
-            drawJumbleButton()
-            jumbleButtonClick(currentCursorPosX, currentCursorPosY)
-            if (isJumbleClickedThenStartJigsaw)
-            {
-                if(keyTap == 1) // leave the circle at this loc
+            if(isJumbleButtonClicked(currentCursorPosX, currentCursorPosY)){
+              /* If the button is clicked then dont draw the button */
+              jumblePieces();
+              drawJumbleButton("Start your play! ")
+              if(keyTap == 1) // leave the circle at this loc
                 {
                   keyTap = 0
                   //ctxTest.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
-                  drawMyStaticCircle(currentCursorPosX, currentCursorPosY, 'red');
+                  //drawMyStaticCircle(currentCursorPosX, currentCursorPosY, 'red');
                 }
                 else // pickup the circle
                 {
                   keyTap = 1;
                   //ctxTest.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
-                  drawMyStaticCircle(currentCursorPosX, currentCursorPosY, 'green');
+                  //drawMyStaticCircle(currentCursorPosX, currentCursorPosY, 'green');
                 }
+            }
+            else{
+              /* If button is not clicked then draw it */
+              drawJumbleButton("Click jumble here!");  
             }
             console.log ("KEY TAP keyTap = " + keyTap);
             break;
