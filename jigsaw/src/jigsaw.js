@@ -42,6 +42,20 @@ var rightBottom = new Image();
 rightBottom.src = "/samplePuzzles/Uncle_Scrooge_pieces/4.jpg";
 rightBottom.style.display = "inline-block";
 
+/*
+Later : Will be used to remember the position of the piece on the canvas
+*/
+var piece_topLeft_X = 0;
+var piece_topLeft_Y = 0;
+
+var piece_topRight_X = 0;
+var piece_topRight_Y = 0;
+
+var piece_bottomRight_X = 0;
+var piece_bottomRight_Y = 0;
+
+var piece_bottomLeft_X = 0;
+var piece_bottomLeft_Y = 0;
 
 // render each frame
 function drawCursor(obj)
@@ -79,6 +93,9 @@ function drawCursor(obj)
         if(keyTap == 1){
             //ctxTest.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
             //drawMyStaticCircle(currentCursorPosX, currentCursorPosY, 'green');
+
+            //TO DO : FIXME
+            identifyPieceSelectionOnKeytap();
         }
   }
 };
@@ -88,7 +105,6 @@ function initPuzzle()
    leftTop.onload = function() {
       ctxTest.drawImage(leftTop, -662, -595,190,120); // left top piece
       drawBordersToPieces(-662,-595);
-
    }
    rightTop.onload = function() {
       ctxTest.drawImage(rightTop, -471, -596,190,120); // right top piece
@@ -118,15 +134,88 @@ $(document).ready(function(){
 function jumblePieces(){
 
   ctxTest.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
-  ctxTest.drawImage(rightBottom, -662, -595, 190, 120); // left top piece
+
+  // left top position(Q2) holds rightBottom piece
+  ctxTest.drawImage(rightBottom, -662, -595, 190, 120);
   drawBordersToPieces(-662,-595);
-  ctxTest.drawImage(leftBottom,  -471, -596, 190, 120); // right top piece
+  piece_bottomRight_X = -662;
+  piece_bottomRight_Y = -595;
+
+  // right top position (Q1) holds leftBottom
+  ctxTest.drawImage(leftBottom,  -471, -596, 190, 120);
   drawBordersToPieces(-471,-596);
-  ctxTest.drawImage(rightTop,    -662, -475, 190, 120); // right bottom piece
+  piece_bottomLeft_X = -471;
+  piece_bottomLeft_Y = -596;
+
+  // left bottom position(Q3) holds rightTop piece
+  ctxTest.drawImage(rightTop,    -662, -475, 190, 120);
   drawBordersToPieces(-662,-475);
-  ctxTest.drawImage(leftTop,     -471, -475, 190, 120); // right bottom piece
+  piece_topRight_X = -662;
+  piece_topRight_Y = -475;
+
+  // right bottom position(Q4) holds leftTop piece
+  ctxTest.drawImage(leftTop,     -471, -475, 190, 120);
   drawBordersToPieces(-471,-475);
+  piece_topLeft_X = -471;
+  piece_topLeft_Y = -475;
+
 }
+
+/*
+This function know the currentX currentY co-ords where tap occured.
+It will return which piece is under the tap co-ords.
+Also update the piece_<which_ever>_X and piece_<which_ever>_Y for future use
+*/
+function identifyPieceSelectionOnKeytap(){
+  var verticleLine_X_top = -470;
+  var verticleLine_Y_top = -596
+  var verticleLine_X_bottom = -470;
+  var verticleLine_Y_bottom = (-475 + 120);
+
+  var horizLine_X_left;
+  var horizLine_Y_left;
+  var horizLine_X_right;
+  var horizLine_Y_right;
+
+  var value = computeValueForWhichSideOfLine(verticleLine_X_top, verticleLine_Y_top,verticleLine_X_bottom, verticleLine_Y_bottom,currentCursorPosX, currentCursorPosY);
+  if(value < 0)
+  {
+      //console.log ("R I G H T side of verticle axis");
+      horizLine_X_left = -662;
+      horizLine_Y_left = -475;
+      horizLine_X_right = -471;
+      horizLine_Y_right = -475;
+      value = computeValueForWhichSideOfLine(horizLine_X_left ,horizLine_Y_left, horizLine_X_right, horizLine_Y_right ,currentCursorPosX, currentCursorPosY);
+
+      if(value < 0){
+          console.log ( "R I G H T - A B O V E "); // Quadrant 1
+          keyTap = 0;
+      }else{
+          console.log (" R I G H T - B E L O W");  // Quadrant 4
+          keyTap = 0;
+      }
+  }else{
+      //console.log ("L E F T  side of verticle axis");
+      horizLine_X_left = -471;
+      horizLine_Y_left = -475;
+      horizLine_X_right = -321;
+      horizLine_Y_right = -475;
+      value = computeValueForWhichSideOfLine(horizLine_X_right , horizLine_Y_right, horizLine_X_left, horizLine_Y_left, currentCursorPosX, currentCursorPosY);
+      if(value < 0){
+          console.log ("L E F T - B E L O W"); // Quadrant 3
+          keyTap = 0;
+      }else{
+          console.log ( "L E F T - A B O V E "); // Quadrant 2
+          keyTap = 0;
+      }
+  }
+}
+
+function computeValueForWhichSideOfLine(Ax, Ay, Bx, By, Cx, Cy){
+
+  return((Bx - Ax) * (Cy - Ay) - (By - Ay) * (Cx - Ax));
+}
+
 
 function drawMyStaticCircle(X, Y, color){
   ctxTest.beginPath();
@@ -173,6 +262,7 @@ function isJumbleButtonClicked(x, y){
             && top <= y) 
   {
             console.log("JUMBLE CLICKED ! ");
+            keyTap = 0;
             return true;
   }
   return false;
@@ -215,20 +305,24 @@ function hideSolution(id){
         {
           case "screenTap":
           case "keyTap":
-          //console.log("X = " + currentCursorPosX + "Y = " + currentCursorPosY)
+            /*
+              Only when the keyTapped then the piece is selected.
+              Otherwise do not move the piece
+            */
+            keyTap = 1;
             if(isJumbleButtonClicked(currentCursorPosX, currentCursorPosY)){
               /* If the button is clicked then dont draw the button */
               jumblePieces();
               drawJumbleButton("Start your play! ")
               if(keyTap == 1) // leave the circle at this loc
                 {
-                  keyTap = 0
+                  //keyTap = 0
                   //ctxTest.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
                   //drawMyStaticCircle(currentCursorPosX, currentCursorPosY, 'red');
                 }
                 else // pickup the circle
                 {
-                  keyTap = 1;
+                  //keyTap = 1;
                   //ctxTest.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
                   //drawMyStaticCircle(currentCursorPosX, currentCursorPosY, 'green');
                 }
