@@ -24,7 +24,6 @@ ctxTest.translate(canvasTest.width/2,canvasTest.height);
 var currentCursorPosX;
 var currentCursorPosY;
 var keyTap = 0;
-var isJumbleClickedThenStartJigsaw = 0;
 
 var leftTop = new Image();
 leftTop.src = "/samplePuzzles/Uncle_Scrooge_pieces/1.jpg";
@@ -43,7 +42,6 @@ rightBottom.src = "/samplePuzzles/Uncle_Scrooge_pieces/4.jpg";
 rightBottom.style.display = "inline-block";
 
 var quandrant_loc_to_piece_map = { Q1:"rightTop" ,  Q2 : "leftTop" , Q3:"leftBottom" , Q4:"rightBottom"};
-var yesJumbleButtonClicked = 0;
 var quadrant_clicked;
 /*
 Later : Will be used to remember the position of the piece on the canvas
@@ -101,26 +99,6 @@ function drawCursor(obj)
   }
 };
 
-function initPuzzle()
-{
-   leftTop.onload = function() {
-      ctxTest.drawImage(leftTop, -662, -595,190,120); // left top piece
-      drawBordersToPieces(-662,-595,"blue");
-   }
-   rightTop.onload = function() {
-      ctxTest.drawImage(rightTop, -471, -596,190,120); // right top piece
-      drawBordersToPieces(-471,-596,"blue");
-   }
-   leftBottom.onload = function() {
-      ctxTest.drawImage(leftBottom, -662, -475,190,120); // right bottom piece
-      drawBordersToPieces(-662,-475,"blue");
-   }
-   rightBottom.onload = function() {
-      ctxTest.drawImage(rightBottom, -471, -475,190,120); // right bottom piece
-      drawBordersToPieces(-471,-475,"blue");
-   }
-}
-
 function drawBordersToPieces(X, Y,color){
 
       ctxTest.rect(X, Y,192,122);
@@ -128,39 +106,45 @@ function drawBordersToPieces(X, Y,color){
       ctxTest.strokeStyle = color;
       ctxTest.stroke();
 }
+
 $(document).ready(function(){
-   initPuzzle();
-   drawJumbleButton("Click Jumble here");
+   jumblePieces();
 });
 
 function jumblePieces(){
 
-  ctxTest.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
-
-  // left top position(Q2) holds rightBottom piece
-  ctxTest.drawImage(rightBottom, -662, -595, 190, 120);
-  drawBordersToPieces(-662,-595,"blue");
+  rightBottom.onload = function() {
+    // left top position(Q2) holds rightBottom piece
+    ctxTest.drawImage(rightBottom, -662, -595, 190, 120);
+    drawBordersToPieces(-662,-595,"blue");
+  }
   piece_topLeft_X = -662;
   piece_topLeft_Y = -595;
   quandrant_loc_to_piece_map["Q2"] = "rightBottom";
 
-  // right top position (Q1) holds leftBottom
-  ctxTest.drawImage(leftBottom,  -471, -596, 190, 120);
-  drawBordersToPieces(-471,-596,"blue");
+  leftBottom.onload = function() {
+    // right top position (Q1) holds leftBottom
+    ctxTest.drawImage(leftBottom,  -471, -596, 190, 120);
+   drawBordersToPieces(-471,-596,"blue");
+  }
   piece_topRight_X = -471;
   piece_topRight_Y = -596;
   quandrant_loc_to_piece_map["Q1"] = "leftBottom";
 
-  // left bottom position(Q3) holds rightTop piece
-  ctxTest.drawImage(rightTop,    -662, -475, 190, 120);
-  drawBordersToPieces(-662,-475,"blue");
+  rightTop.onload = function() {
+    // left bottom position(Q3) holds rightTop piece
+    ctxTest.drawImage(rightTop,    -662, -475, 190, 120);
+    drawBordersToPieces(-662,-475,"blue");
+  }
   piece_bottomLeft_X = -662;
   piece_bottomLeft_Y = -475;
   quandrant_loc_to_piece_map["Q3"] = "rightTop";
 
-  // right bottom position(Q4) holds leftTop piece
-  ctxTest.drawImage(leftTop,     -471, -475, 190, 120);
-  drawBordersToPieces(-471,-475,"blue");
+  leftTop.onload = function() {
+    // right bottom position(Q4) holds leftTop piece
+    ctxTest.drawImage(leftTop,     -471, -475, 190, 120);
+    drawBordersToPieces(-471,-475,"blue");
+  }
   piece_bottomRight_X = -471;
   piece_bottomRight_Y = -475;
   quandrant_loc_to_piece_map["Q4"] = "leftTop";
@@ -312,48 +296,6 @@ function drawMyStaticCircle(X, Y , imageSrc){
   }
 }
 
-/*
-Jumble button story:
-Drawing jumble button on the canvasTest
-Once the button is pressed. It will disappear
-Draw button till it is pressed.
-Until the jumble button is not pressed the game cannot start.
-So pieces cannot move.
-Show msg press jumble to start your game.
-*/
-
-function drawJumbleButton(msg) {
-  ctxTest.beginPath();
-  ctxTest.lineWidth="10";
-  ctxTest.strokeStyle="blue";
-  ctxTest.rect(-650,-300,575,80); // x= 0 y = 400 width = 175 h = 80
-    //Bcuz of ctx translate  x= -650 y = -300 width = 175 h = 80
-  ctxTest.stroke();
-  ctxTest.font = "30px Arial";
-  ctxTest.fillText(msg,-450,-250);
-}
-
-
-function isJumbleButtonClicked(x, y){
-  var left = -650 //x
-  var right = -650 + 775
-  var top = -300 //y
-  var bottom = -300 + 160
-
-  if (right >= x
-            && left <= x
-            && bottom >= y
-            && top <= y) 
-  {
-            console.log("J U M B L E C L I C K E D ! ");
-            //keyTap = 0;
-             jumblePieces();
-             yesJumbleButtonClicked = 1;
-  }else{
-      yesJumbleButtonClicked = 0;
-  }
-  return yesJumbleButtonClicked;
-}
 
 // Creates our Leap Controller
     var controller = new Leap.Controller({enableGestures:true});
@@ -385,26 +327,14 @@ function isJumbleButtonClicked(x, y){
         {
           case "screenTap":
           case "keyTap":
-              console.log ("KEY TAP = " + keyTap);
-            /*
-              Only when the keyTapped then the piece is selected.
-              Otherwise do not move the piece
-            */
-            if(yesJumbleButtonClicked == 0)
-            {
-                jumblePieces();
-                isJumbleButtonClicked(currentCursorPosX, currentCursorPosY);
-            }
-            else{
-                /* If the button is clicked then dont draw the button */
+               console.log ("KEY TAP = " + keyTap);
                if(keyTap == 1)
                {
                   // Resetting keyTap to keep the puzzle piece at the curr pos
                   keyTap = 0;
                   var yesOrNo = isSolutionBoardClicked();
-                  if(yesOrNo == false){
-                      drawJumbleButton(" Incorrect Solution :( ")
-                  }else{
+                  if(yesOrNo)
+                  {
                       drawCurrentSolutionBoard(quandrant_loc_to_piece_map[quadrant_clicked]);
                   }
                }
@@ -417,7 +347,6 @@ function isJumbleButtonClicked(x, y){
                   {
                       drawMyStaticCircle(currentCursorPosX, currentCursorPosY, quandrant_loc_to_piece_map[quadrant_clicked] );
                   }
-                }
               }//if puzzleBoardClicked ends
             }//else of isJumbleButtonClicked ends here
             break;
