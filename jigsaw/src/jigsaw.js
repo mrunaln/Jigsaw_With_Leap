@@ -5,6 +5,7 @@ var currentCursorPosY;
 var message;
 var quadrant_clicked;
 var quandrant_loc_to_piece_map = { Q1:"rightTop" ,  Q2 : "leftTop" , Q3:"leftBottom" , Q4:"rightBottom"};
+;
 /*
 Used to remember the position of the piece on the canvas
 */
@@ -21,7 +22,7 @@ var piece_bottomLeft_X;
 var piece_bottomLeft_Y;
 var puzzle_tile_counter;
 
-function initGame(){
+function initGame(puzzleName){
       //canvas is used for drawing cursors.
       canvas = document.getElementById("canvas");
       // canvasTest used for drawing static circle currently
@@ -48,7 +49,7 @@ function initGame(){
 
       ctx.clearRect(-canvas.width/2,-canvas.height,canvas.width,canvas.height);
       ctx.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
-      puzzleName = "Uncle_Scrooge_pieces";
+      
       leftTop = new Image();
       leftTop.src = "/samplePuzzles/" + puzzleName + "/1.jpg";
       leftTop.style.display = "inline-block";
@@ -129,9 +130,9 @@ function drawCursor(obj)
 
 function isResetClicked(){
   var resetLeft = -300;
-  var resetRight = -300 + 400;
+  var resetRight = -300 + 200;
   var resetTop = -250;
-  var resetBottom = -250 + 200;
+  var resetBottom = -250 + 75;
 
    if (resetRight >= currentCursorPosX
             && resetLeft <= currentCursorPosX
@@ -148,7 +149,34 @@ function isResetClicked(){
 }
 
 /*FIXME*/
-function GameChange(){
+function isGameChanger(){
+  var unclePuzzleLeft = -600;
+  var unclePuzzleRight = -600 + 200;
+  var unclePuzzleTop = -250;
+  var unclePuzzleBottom = -250 + 100;
+
+  var fruitsPuzzleLeft = -25;
+  var fruitsPuzzleRight = -25 + 200;
+  var fruitsPuzzleTop = -250;
+  var fruitsPuzzleBottom = -250 + 100;
+
+
+   if (unclePuzzleRight >= currentCursorPosX
+      && unclePuzzleLeft <= currentCursorPosX
+      && unclePuzzleBottom >= currentCursorPosY
+      && unclePuzzleTop <= currentCursorPosY)
+  {
+      puzzleName = "Uncle_Scrooge_pieces";
+      initGame(puzzleName);
+      
+  }else if(fruitsPuzzleRight >= currentCursorPosX
+      && fruitsPuzzleLeft <= currentCursorPosX
+      && fruitsPuzzleBottom >= currentCursorPosY
+      && fruitsPuzzleTop <= currentCursorPosY)
+  {
+      puzzleName = "fruits_pieces";
+      initGame(puzzleName);
+  }
 }
 
 function drawButtons(){
@@ -184,7 +212,8 @@ function drawBordersToPieces(X, Y,color){
 }
 
 $(document).ready(function(){
-   initGame();  
+  puzzleName = "Uncle_Scrooge_pieces";
+  initGame(puzzleName);
 });
 
 function jumblePieces(){
@@ -396,8 +425,9 @@ function drawMyStaticCircle(X, Y , imageSrc){
       }
       */
       if (isResetClicked()){
-        initGame();
+        initGame(puzzleName);
       }
+      isGameChanger();
       drawCursor(frame);
       for( var i = 0; i < frame.gestures.length; i++ ){
         var gesture = frame.gestures[i];
