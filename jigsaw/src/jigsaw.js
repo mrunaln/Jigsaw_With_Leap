@@ -160,12 +160,13 @@ function isGameChanger(){
   var fruitsPuzzleTop = -250;
   var fruitsPuzzleBottom = -250 + 100;
 
-
+  message = document.getElementById("message");
    if (unclePuzzleRight >= currentCursorPosX
       && unclePuzzleLeft <= currentCursorPosX
       && unclePuzzleBottom >= currentCursorPosY
       && unclePuzzleTop <= currentCursorPosY)
   {
+      $('#message').html("<span> " + " Play Uncle scrooge puzzle</span>");
       puzzleName = "Uncle_Scrooge_pieces";
       initGame(puzzleName);
       
@@ -174,6 +175,7 @@ function isGameChanger(){
       && fruitsPuzzleBottom >= currentCursorPosY
       && fruitsPuzzleTop <= currentCursorPosY)
   {
+      $('#message').html("<span> " + " Play fruit basket puzzle</span>");
       puzzleName = "fruits_pieces";
       initGame(puzzleName);
   }
