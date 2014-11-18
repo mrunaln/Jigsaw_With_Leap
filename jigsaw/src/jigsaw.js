@@ -123,7 +123,7 @@ function drawCursor(obj)
         if(keyTap == 1)
         {
             ctxTest.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
-            drawMyStaticCircle(currentCursorPosX, currentCursorPosY, quandrant_loc_to_piece_map[quadrant_clicked] );
+            drawPuzzleTiles(currentCursorPosX, currentCursorPosY, quandrant_loc_to_piece_map[quadrant_clicked] );
         }
   }
 };
@@ -169,7 +169,7 @@ function isGameChanger(){
       $('#message').html("<span> " + " Play Uncle scrooge puzzle</span>");
       puzzleName = "Uncle_Scrooge_pieces";
       initGame(puzzleName);
-      
+
   }else if(fruitsPuzzleRight >= currentCursorPosX
       && fruitsPuzzleLeft <= currentCursorPosX
       && fruitsPuzzleBottom >= currentCursorPosY
@@ -353,9 +353,9 @@ function drawCurrentSolutionBoard(imageSrc){
         solutionBoard_y = -475; // verified
     }
     puzzle_tile_counter++;
-    drawMyStaticCircle(solutionBoard_x,solutionBoard_y,imageSrc);
+    drawPuzzleTiles(solutionBoard_x,solutionBoard_y,imageSrc);
 }
-function drawMyStaticCircle(X, Y , imageSrc){
+function drawPuzzleTiles(X, Y , imageSrc){
 
   ctxTest.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
   if(imageSrc == "rightTop")
@@ -404,72 +404,53 @@ function drawMyStaticCircle(X, Y , imageSrc){
 
 
 // Creates our Leap Controller
-    var controller = new Leap.Controller({enableGestures:true});
-    // Tells the controller what to do every time it sees a frame
-    controller.on( 'frame' , function( frame ){
-      /*
-      Snippet below works with hands object.
-      Tried to execute and read regarding rotate hand.
-      Unable find a clear rotation angle yet.
-      Not sure if will use hands approach.
-      Reference : 
-      https://developer.leapmotion.com/documentation/javascript/api/Leap.Hand.html#fingers[]
-      */
-      /*
-      if(frame.hands.length > 0)
-      {
-        var hand = frame.hands[0];
-        console.log(" hand - " + frame.hands[0]);
-        var previousFrame = controller.frame(1);
-        var totalRotation = hand.rotationAngle(previousFrame);
-        var rotationAroundZAxis = hand.rotationAngle(previousFrame, [0,0,1]);
-        console.log("Rot: " + totalRotation + ", Z Rot:" + rotationAroundZAxis);
-      }
-      */
-      if (isResetClicked()){
-        initGame(puzzleName);
-      }
-      isGameChanger();
-      drawCursor(frame);
-      for( var i = 0; i < frame.gestures.length; i++ ){
-        var gesture = frame.gestures[i];
-        switch(gesture.type)
-        {
-          case "screenTap":
-          case "keyTap":
-               console.log ("KEY TAP = " + keyTap);
-               if(keyTap == 1)
-               {
-                  // Resetting keyTap to keep the puzzle piece at the curr pos
-                  keyTap = 0;
-                  var yesOrNo = isSolutionBoardClicked();
-                  if(yesOrNo)
-                  {
-                      drawCurrentSolutionBoard(quandrant_loc_to_piece_map[quadrant_clicked]);
-                      if(puzzle_tile_counter == 4){
-                        message = document.getElementById("message");
-                        $('#message').html("<span> " + "YAYYYY.. Puzzle Complete !" + "</span>");
-                        drawButtons();
-                      }else if(puzzle_tile_counter < 0){
-                        message = document.getElementById("message");
-                        $('#message').html("<span> " + "You are going great! " + (4 - puzzle_tile_counter) + " tiles to go !" + "</span>");
-                      }
+var controller = new Leap.Controller({enableGestures:true});
+// Tells the controller what to do every time it sees a frame
+controller.on( 'frame' , function( frame ){
+  if (isResetClicked()){
+    initGame(puzzleName);
+  }
+  isGameChanger();
+  drawCursor(frame);
+  for( var i = 0; i < frame.gestures.length; i++ ){
+    var gesture = frame.gestures[i];
+    switch(gesture.type)
+    {
+      case "screenTap":
+      case "keyTap":
+           console.log ("KEY TAP = " + keyTap);
+           if(keyTap == 1)
+           {
+              // Resetting keyTap to keep the puzzle piece at the curr pos
+              keyTap = 0;
+              var yesOrNo = isSolutionBoardClicked();
+              if(yesOrNo)
+              {
+                  drawCurrentSolutionBoard(quandrant_loc_to_piece_map[quadrant_clicked]);
+                  if(puzzle_tile_counter == 4){
+                    message = document.getElementById("message");
+                    $('#message').html("<span> " + "YAYYYY.. Puzzle Complete !" + "</span>");
+                    drawButtons();
+                  }else if(puzzle_tile_counter < 0){
+                    message = document.getElementById("message");
+                    $('#message').html("<span> " + "You are going great! " + (4 - puzzle_tile_counter) + " tiles to go !" + "</span>");
                   }
-               }
-               else if(isPuzzleBoardClicked())
-               {
-                  //in the below func call the value of keyTap toggles on correct piece identification
-                  quadrant_clicked = identifyPieceSelectionOnKeytap();
-                  if(quadrant_clicked != null &&
-                    quandrant_loc_to_piece_map[quadrant_clicked] != null)
-                  {
-                      drawMyStaticCircle(currentCursorPosX, currentCursorPosY, quandrant_loc_to_piece_map[quadrant_clicked] );
-                  }
-              }//if puzzleBoardClicked ends
-            }//else of isJumbleButtonClicked ends here
-            break;
-        }
-    });
+              }
+           }
+           else if(isPuzzleBoardClicked())
+           {
+              //in the below func call the value of keyTap toggles on correct piece identification
+              quadrant_clicked = identifyPieceSelectionOnKeytap();
+              if(quadrant_clicked != null &&
+                quandrant_loc_to_piece_map[quadrant_clicked] != null)
+              {
+                  drawPuzzleTiles(currentCursorPosX, currentCursorPosY, quandrant_loc_to_piece_map[quadrant_clicked] );
+              }
+          }//if puzzleBoardClicked ends
+        }//else of isJumbleButtonClicked ends here
+        break;
+  }
+});
 
 /*
 Handling if the device gets disconnected in between.
