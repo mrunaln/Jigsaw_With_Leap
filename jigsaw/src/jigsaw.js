@@ -1,4 +1,22 @@
 
+var puzzleName = "fruits_pieces";
+var leftTop = new Image();
+leftTop.src = "/samplePuzzles/" + puzzleName + "/1.jpg";
+leftTop.style.display = "inline-block";
+
+var rightTop = new Image();
+rightTop.src = "/samplePuzzles/"+ puzzleName +"/2.jpg";
+rightTop.style.display = "inline-block";
+
+var leftBottom = new Image();
+leftBottom.src = "/samplePuzzles/"+ puzzleName +"/3.jpg";
+leftBottom.style.display = "inline-block";
+
+var rightBottom = new Image();
+rightBottom.src = "/samplePuzzles/"+ puzzleName +"/4.jpg";
+rightBottom.style.display = "inline-block";
+
+
 //canvas is used for drawing cursors.
 var canvas = document.getElementById("canvas");
 // canvasTest used for drawing static circle currently
@@ -24,23 +42,6 @@ ctxTest.translate(canvasTest.width/2,canvasTest.height);
 var currentCursorPosX;
 var currentCursorPosY;
 var keyTap = 0;
-
-var leftTop = new Image();
-leftTop.src = "/samplePuzzles/Uncle_Scrooge_pieces/1.jpg";
-leftTop.style.display = "inline-block";
-
-var rightTop = new Image();
-rightTop.src = "/samplePuzzles/Uncle_Scrooge_pieces/2.jpg";
-rightTop.style.display = "inline-block";
-
-var leftBottom = new Image();
-leftBottom.src = "/samplePuzzles/Uncle_Scrooge_pieces/3.jpg";
-leftBottom.style.display = "inline-block";
-
-var rightBottom = new Image();
-rightBottom.src = "/samplePuzzles/Uncle_Scrooge_pieces/4.jpg";
-rightBottom.style.display = "inline-block";
-
 var quandrant_loc_to_piece_map = { Q1:"rightTop" ,  Q2 : "leftTop" , Q3:"leftBottom" , Q4:"rightBottom"};
 var quadrant_clicked;
 /*
