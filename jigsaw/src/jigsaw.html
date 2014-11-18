@@ -8,11 +8,26 @@
             bottom: 0;
             position: fixed;
         }
+        .message{
+           width: 100%;
+            bottom: 0.5;
+            position: fixed;
+        }
+
       body 
       { 
         width:960px; 
         margin: 10px auto; 
         font:normal 14px/20px 'Georgia', serif; 
+      }
+      .left{
+        float : left;
+        margin-right: 540px;
+        margin-bottom: 100px;
+        
+      }
+      .right{
+        float : center;
       }
       .center 
       { 
@@ -118,9 +133,17 @@
               </div>
           </div>
     </div>
+    
     <footer>
-      Project By Mrunal Nargunde
+      <div id ="message" style="font-size:20px;" class = "left">
+          Start game now !!
+      </div>
+      <div class="right">
+        Project By Mrunal Nargunde
+      </div>
     </footer>
+
+
     <script src="//js.leapmotion.com/leap-0.6.2.min.js"></script>
     <script src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/109794/d3.v3.js'></script>
     <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>    
