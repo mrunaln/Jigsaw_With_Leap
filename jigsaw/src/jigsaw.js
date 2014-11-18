@@ -44,7 +44,7 @@ rightBottom.style.display = "inline-block";
 var quandrant_loc_to_piece_map = { Q1:"rightTop" ,  Q2 : "leftTop" , Q3:"leftBottom" , Q4:"rightBottom"};
 var quadrant_clicked;
 /*
-Later : Will be used to remember the position of the piece on the canvas
+Used to remember the position of the piece on the canvas
 */
 var piece_topLeft_X = 0;
 var piece_topLeft_Y = 0;
@@ -58,6 +58,8 @@ var piece_bottomRight_Y = 0;
 var piece_bottomLeft_X = 0;
 var piece_bottomLeft_Y = 0;
 
+var puzzle_tile_counter = 0;
+var message;
 // render each frame
 function drawCursor(obj)
 {
@@ -232,8 +234,6 @@ function computeValueForWhichSideOfLine(Ax, Ay, Bx, By, Cx, Cy){
 
 function drawCurrentSolutionBoard(imageSrc){
     var solutionBoard_x, solutionBoard_y;
-    console.log(currentCursorPosX);
-    console.log(currentCursorPosY);
     if(imageSrc == "rightTop"){ // Q1
         solutionBoard_x = -60;
         solutionBoard_y = -595; // verified doing good
@@ -247,6 +247,7 @@ function drawCurrentSolutionBoard(imageSrc){
         solutionBoard_x = -252;
         solutionBoard_y = -475; // verified
     }
+    puzzle_tile_counter++;
     drawMyStaticCircle(solutionBoard_x,solutionBoard_y,imageSrc);
 }
 function drawMyStaticCircle(X, Y , imageSrc){
@@ -336,6 +337,13 @@ function drawMyStaticCircle(X, Y , imageSrc){
                   if(yesOrNo)
                   {
                       drawCurrentSolutionBoard(quandrant_loc_to_piece_map[quadrant_clicked]);
+                      if(puzzle_tile_counter == 4){
+                        message = document.getElementById("message");
+                        $('#message').html("<span> " + "YAYYYY.. Puzzle Complete !" + "</span>");
+                      }else{
+                        message = document.getElementById("message");
+                        $('#message').html("<span> " + "You are going great! " + (4 - puzzle_tile_counter) + " tiles to go !" + "</span>");
+                      }
                   }
                }
                else if(isPuzzleBoardClicked())
