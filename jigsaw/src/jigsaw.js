@@ -355,7 +355,7 @@ function drawCurrentSolutionBoard(imageSrc){
     puzzle_tile_counter++;
     drawPuzzleTiles(solutionBoard_x,solutionBoard_y,imageSrc);
 }
-function drawPuzzleTiles(X, Y , imageSrc){
+function drawPuzzleTiles(X, Y, imageSrc){
 
   ctxTest.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
   if(imageSrc == "rightTop")
@@ -401,12 +401,36 @@ function drawPuzzleTiles(X, Y , imageSrc){
     ctxTest.drawImage(rightTop,  piece_bottomLeft_X, piece_bottomLeft_Y, 190, 120);
   }
 }
+function keepTileOnPuzzleBoard(img){
 
+  if(img == "rightTop"){
+      piece_bottomLeft_X = -662;
+      piece_bottomLeft_Y = -475;
+      ctxTest.drawImage(rightTop, piece_bottomLeft_X , piece_bottomLeft_Y, 190, 120);
+  }
+  else if(img == "rightBottom"){
+      piece_topLeft_X = -662;
+      piece_topLeft_Y = -595;
+      ctxTest.drawImage(rightBottom, piece_topLeft_X , piece_topLeft_Y, 190, 120);
+  }
+  else if(img == "leftTop"){
+      piece_bottomRight_X = -471;
+      piece_bottomRight_Y = -475;
+      ctxTest.drawImage(leftTop, piece_bottomRight_X , piece_bottomRight_Y, 190, 120);
+  }
+  else if(img == "leftBottom"){
+      piece_topRight_X = -471;
+      piece_topRight_Y = -596;
+      ctxTest.drawImage(leftBottom, piece_bottomLeft_X , piece_bottomLeft_Y, 190, 120);
+  }
+
+}
 
 // Creates our Leap Controller
 var controller = new Leap.Controller({enableGestures:true});
 // Tells the controller what to do every time it sees a frame
 controller.on( 'frame' , function( frame ){
+  var prev_quadrant_clicked;
   if (isResetClicked()){
     initGame(puzzleName);
   }
@@ -435,11 +459,18 @@ controller.on( 'frame' , function( frame ){
                     message = document.getElementById("message");
                     $('#message').html("<span> " + "You are going great! " + (4 - puzzle_tile_counter) + " tiles to go !" + "</span>");
                   }
+              }else{ // if the piece is not left inside the soln board then
+                    //put it back to puzzle board
+                  /* Thats a hack :( */
+                  ctxTest.fillStyle="#FFFFFF";
+                  ctxTest.fillRect(currentCursorPosX,currentCursorPosY,190,120);
+                  keepTileOnPuzzleBoard(quandrant_loc_to_piece_map[quadrant_clicked]);
               }
            }
            else if(isPuzzleBoardClicked())
            {
               //in the below func call the value of keyTap toggles on correct piece identification
+              prev_quadrant_clicked = quadrant_clicked;
               quadrant_clicked = identifyPieceSelectionOnKeytap();
               if(quadrant_clicked != null &&
                 quandrant_loc_to_piece_map[quadrant_clicked] != null)
