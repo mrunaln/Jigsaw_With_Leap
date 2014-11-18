@@ -1,66 +1,91 @@
-
-var puzzleName = "fruits_pieces";
-var leftTop = new Image();
-leftTop.src = "/samplePuzzles/" + puzzleName + "/1.jpg";
-leftTop.style.display = "inline-block";
-
-var rightTop = new Image();
-rightTop.src = "/samplePuzzles/"+ puzzleName +"/2.jpg";
-rightTop.style.display = "inline-block";
-
-var leftBottom = new Image();
-leftBottom.src = "/samplePuzzles/"+ puzzleName +"/3.jpg";
-leftBottom.style.display = "inline-block";
-
-var rightBottom = new Image();
-rightBottom.src = "/samplePuzzles/"+ puzzleName +"/4.jpg";
-rightBottom.style.display = "inline-block";
-
-
-//canvas is used for drawing cursors.
-var canvas = document.getElementById("canvas");
-// canvasTest used for drawing static circle currently
-var canvasTest = document.getElementById("canvasTest");
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-width = window.innerWidth;
-height = window.innerHeight;
-// create a rendering context
-var ctx = canvas.getContext("2d");
-ctx.translate(canvas.width/2,canvas.height);
-ctx.fillStyle = "rgba(0,0,0,0.7)";
-
-/*
-Using 2 canvas approach now.
-One canvas for drawing cursors as it needs to be cleared every time the cursor moves.
-CanvasTest for drawing the picture(currently staticCircle) only when keytaps occur.
-*/
-canvasTest.width = window.innerWidth;
-canvasTest.height = window.innerHeight;
-var ctxTest = canvasTest.getContext("2d");
-ctxTest.translate(canvasTest.width/2,canvasTest.height);
+var canvas, canvasTest, ctx, ctxTest;
+var puzzleName, leftTop, leftBottom,rightBottom,rightTop, keyTap;
 var currentCursorPosX;
 var currentCursorPosY;
-var keyTap = 0;
-var quandrant_loc_to_piece_map = { Q1:"rightTop" ,  Q2 : "leftTop" , Q3:"leftBottom" , Q4:"rightBottom"};
+var message;
 var quadrant_clicked;
+var quandrant_loc_to_piece_map = { Q1:"rightTop" ,  Q2 : "leftTop" , Q3:"leftBottom" , Q4:"rightBottom"};
 /*
 Used to remember the position of the piece on the canvas
 */
-var piece_topLeft_X = 0;
-var piece_topLeft_Y = 0;
+var piece_topLeft_X ;
+var piece_topLeft_Y;
 
-var piece_topRight_X = 0;
-var piece_topRight_Y = 0;
+var piece_topRight_X;
+var piece_topRight_Y;
 
-var piece_bottomRight_X = 0;
-var piece_bottomRight_Y = 0;
+var piece_bottomRight_X;
+var piece_bottomRight_Y;
 
-var piece_bottomLeft_X = 0;
-var piece_bottomLeft_Y = 0;
+var piece_bottomLeft_X;
+var piece_bottomLeft_Y;
+var puzzle_tile_counter;
 
-var puzzle_tile_counter = 0;
-var message;
+function initGame(){
+      //canvas is used for drawing cursors.
+      canvas = document.getElementById("canvas");
+      // canvasTest used for drawing static circle currently
+      canvasTest = document.getElementById("canvasTest");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      width = window.innerWidth;
+      height = window.innerHeight;
+      // create a rendering context
+      ctx = canvas.getContext("2d");
+      ctx.translate(canvas.width/2,canvas.height);
+      ctx.fillStyle = "rgba(0,0,0,0.7)";
+
+      /*
+      Using 2 canvas approach now.
+      One canvas for drawing cursors as it needs to be cleared every time the cursor moves.
+      CanvasTest for drawing the picture(currently staticCircle) only when keytaps occur.
+      */
+      canvasTest.width = window.innerWidth;
+      canvasTest.height = window.innerHeight;
+      ctxTest = canvasTest.getContext("2d");
+      ctxTest.translate(canvasTest.width/2,canvasTest.height);
+
+
+      ctx.clearRect(-canvas.width/2,-canvas.height,canvas.width,canvas.height);
+      ctx.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
+      puzzleName = "Uncle_Scrooge_pieces";
+      leftTop = new Image();
+      leftTop.src = "/samplePuzzles/" + puzzleName + "/1.jpg";
+      leftTop.style.display = "inline-block";
+
+      rightTop = new Image();
+      rightTop.src = "/samplePuzzles/"+ puzzleName +"/2.jpg";
+      rightTop.style.display = "inline-block";
+
+      leftBottom = new Image();
+      leftBottom.src = "/samplePuzzles/"+ puzzleName +"/3.jpg";
+      leftBottom.style.display = "inline-block";
+
+      rightBottom = new Image();
+      rightBottom.src = "/samplePuzzles/"+ puzzleName +"/4.jpg";
+      rightBottom.style.display = "inline-block";
+
+      keyTap = 0;
+      quandrant_loc_to_piece_map = { Q1:"rightTop" ,  Q2 : "leftTop" , Q3:"leftBottom" , Q4:"rightBottom"};
+      piece_topLeft_X = 0;
+      piece_topLeft_Y = 0;
+
+      piece_topRight_X = 0;
+      piece_topRight_Y = 0;
+
+      piece_bottomRight_X = 0;
+      piece_bottomRight_Y = 0;
+
+      piece_bottomLeft_X = 0;
+      piece_bottomLeft_Y = 0;
+
+      puzzle_tile_counter = 0;
+      jumblePieces();
+      drawButtons();
+}
+
+
+
 // render each frame
 function drawCursor(obj)
 {
@@ -102,8 +127,56 @@ function drawCursor(obj)
   }
 };
 
-function drawBordersToPieces(X, Y,color){
+function isResetClicked(){
+  var resetLeft = -300;
+  var resetRight = -300 + 400;
+  var resetTop = -250;
+  var resetBottom = -250 + 200;
 
+   if (resetRight >= currentCursorPosX
+            && resetLeft <= currentCursorPosX
+            && resetBottom >= currentCursorPosY
+            && resetTop <= currentCursorPosY)
+  {
+            console.log("RESET CLICKED ! ");
+             var message = document.getElementById("message");
+             $('#message').html("<span> " + " Resetting the game </span>");
+            return true;
+  }
+  return false;
+
+}
+
+/*FIXME*/
+function GameChange(){
+}
+
+function drawButtons(){
+
+      ctxTest.rect(-600, -250,200, 70);
+      ctxTest.lineWidth = 3;
+      ctxTest.strokeStyle = "blue";
+      ctxTest.stroke();
+      ctxTest.font = "20px Arial";
+      ctxTest.fillText("Uncle Scrooge Game",-595,-190);
+
+      ctxTest.rect(-300, -250,200,75);
+      ctxTest.lineWidth = 3;
+      ctxTest.strokeStyle = "blue";
+      ctxTest.stroke();
+      ctxTest.font = "20px Arial";
+      ctxTest.fillText("Reset Game",-275,-190);
+
+      ctxTest.rect(-25, -250,200,75);
+      ctxTest.lineWidth = 3;
+      ctxTest.strokeStyle = "blue";
+      ctxTest.stroke();
+      ctxTest.font = "20px Arial";
+      ctxTest.fillText("Fruits Puzzle",20,-190);
+}
+
+
+function drawBordersToPieces(X, Y,color){
       ctxTest.rect(X, Y,192,122);
       ctxTest.lineWidth = 3;
       ctxTest.strokeStyle = color;
@@ -111,7 +184,7 @@ function drawBordersToPieces(X, Y,color){
 }
 
 $(document).ready(function(){
-   jumblePieces();
+   initGame();  
 });
 
 function jumblePieces(){
@@ -145,7 +218,7 @@ function jumblePieces(){
 
   leftTop.onload = function() {
     // right bottom position(Q4) holds leftTop piece
-    ctxTest.drawImage(leftTop,     -471, -475, 190, 120);
+    ctxTest.drawImage(leftTop,-471, -475, 190, 120);
     drawBordersToPieces(-471,-475,"blue");
   }
   piece_bottomRight_X = -471;
@@ -322,6 +395,9 @@ function drawMyStaticCircle(X, Y , imageSrc){
         console.log("Rot: " + totalRotation + ", Z Rot:" + rotationAroundZAxis);
       }
       */
+      if (isResetClicked()){
+        initGame();
+      }
       drawCursor(frame);
       for( var i = 0; i < frame.gestures.length; i++ ){
         var gesture = frame.gestures[i];
@@ -341,7 +417,8 @@ function drawMyStaticCircle(X, Y , imageSrc){
                       if(puzzle_tile_counter == 4){
                         message = document.getElementById("message");
                         $('#message').html("<span> " + "YAYYYY.. Puzzle Complete !" + "</span>");
-                      }else{
+                        drawButtons();
+                      }else if(puzzle_tile_counter < 0){
                         message = document.getElementById("message");
                         $('#message').html("<span> " + "You are going great! " + (4 - puzzle_tile_counter) + " tiles to go !" + "</span>");
                       }
