@@ -5,7 +5,8 @@ var currentCursorPosY;
 var message;
 var quadrant_clicked;
 var quandrant_loc_to_piece_map = { Q1:"rightTop" ,  Q2 : "leftTop" , Q3:"leftBottom" , Q4:"rightBottom"};
-;
+var games = [ "Uncle_Scrooge_pieces", "fruits_pieces" ,  "lego_pieces" , "nemo_pieces"];
+var gameChangeFlag = 0;
 /*
 Used to remember the position of the piece on the canvas
 */
@@ -83,6 +84,7 @@ function initGame(puzzleName){
       puzzle_tile_counter = 0;
       jumblePieces();
       drawButtons();
+      gameChangeFlag = 0;
 }
 
 
@@ -142,54 +144,48 @@ function isResetClicked(){
             console.log("RESET CLICKED ! ");
              var message = document.getElementById("message");
              $('#message').html("<span> " + " Resetting the game </span>");
+
             return true;
   }
   return false;
 
 }
 
-/*FIXME*/
-function isGameChanger(){
-  var unclePuzzleLeft = -600;
-  var unclePuzzleRight = -600 + 200;
-  var unclePuzzleTop = -250;
-  var unclePuzzleBottom = -250 + 100;
+function randomGameChooser(){
+    var random;
+    while(1){
+      random = Math.floor(Math.random() * 10);
+      if(random > 0 && random <5){
+        console.log("RANDOM = " + random);
+        return random;
+      }
+    }
+}
 
-  var fruitsPuzzleLeft = -25;
-  var fruitsPuzzleRight = -25 + 200;
-  var fruitsPuzzleTop = -250;
-  var fruitsPuzzleBottom = -250 + 100;
+function isGameChanger(){
+
+  var randomPuzzleLeft = -25;
+  var randomPuzzleRight = -25 + 200;
+  var randomPuzzleTop = -250;
+  var randomPuzzleBottom = -250 + 100;
 
   message = document.getElementById("message");
-   if (unclePuzzleRight >= currentCursorPosX
-      && unclePuzzleLeft <= currentCursorPosX
-      && unclePuzzleBottom >= currentCursorPosY
-      && unclePuzzleTop <= currentCursorPosY)
+  if(randomPuzzleRight >= currentCursorPosX
+      && randomPuzzleLeft <= currentCursorPosX
+      && randomPuzzleBottom >= currentCursorPosY
+      && randomPuzzleTop <= currentCursorPosY)
   {
-      $('#message').html("<span> " + " Play Uncle scrooge puzzle</span>");
-      puzzleName = "Uncle_Scrooge_pieces";
-      initGame(puzzleName);
-
-  }else if(fruitsPuzzleRight >= currentCursorPosX
-      && fruitsPuzzleLeft <= currentCursorPosX
-      && fruitsPuzzleBottom >= currentCursorPosY
-      && fruitsPuzzleTop <= currentCursorPosY)
-  {
-      $('#message').html("<span> " + " Play fruit basket puzzle</span>");
-      puzzleName = "fruits_pieces";
-      initGame(puzzleName);
+      if(gameChangeFlag == 0 ){
+          gameChangeFlag = 1;
+          var random = randomGameChooser();
+          $('#message').html("<span> " + " Play "+ games[random-1] +" puzzle</span>");
+          puzzleName = games[random-1];
+          initGame(puzzleName);
+      }
   }
 }
 
 function drawButtons(){
-
-      ctxTest.rect(-600, -250,200, 70);
-      ctxTest.lineWidth = 3;
-      ctxTest.strokeStyle = "blue";
-      ctxTest.stroke();
-      ctxTest.font = "20px Arial";
-      ctxTest.fillText("Uncle Scrooge Game",-595,-190);
-
       ctxTest.rect(-300, -250,200,75);
       ctxTest.lineWidth = 3;
       ctxTest.strokeStyle = "blue";
@@ -202,7 +198,7 @@ function drawButtons(){
       ctxTest.strokeStyle = "blue";
       ctxTest.stroke();
       ctxTest.font = "20px Arial";
-      ctxTest.fillText("Fruits Puzzle",20,-190);
+      ctxTest.fillText("Random Puzzle",20,-190);
 }
 
 
