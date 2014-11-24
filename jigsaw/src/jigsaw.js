@@ -1,3 +1,8 @@
+//var puzzleBoardCo_ordinated = {  }
+var resetButton = {left: -300 , right: -100, top : -250, bottom: -175};
+
+
+
 var canvas, canvasTest, ctx, ctxTest;
 var puzzleName, leftTop, leftBottom,rightBottom,rightTop, keyTap;
 var currentCursorPosX;
@@ -7,6 +12,10 @@ var quadrant_clicked;
 var quandrant_loc_to_piece_map = { Q1:"rightTop" ,  Q2 : "leftTop" , Q3:"leftBottom" , Q4:"rightBottom"};
 var games = [ "Uncle_Scrooge_pieces", "fruits_pieces" ,  "lego_pieces" , "nemo_pieces"];
 var gameChangeFlag = 0;
+
+
+
+
 /*
 Used to remember the position of the piece on the canvas
 */
@@ -131,15 +140,10 @@ function drawCursor(obj)
 };
 
 function isResetClicked(){
-  var resetLeft = -300;
-  var resetRight = -300 + 200;
-  var resetTop = -250;
-  var resetBottom = -250 + 75;
-
-   if (resetRight >= currentCursorPosX
-            && resetLeft <= currentCursorPosX
-            && resetBottom >= currentCursorPosY
-            && resetTop <= currentCursorPosY)
+   if (resetButton["right"] >= currentCursorPosX
+            && resetButton["left"] <= currentCursorPosX
+            && resetButton["bottom"] >= currentCursorPosY
+            && resetButton["top"] <= currentCursorPosY)
   {
             console.log("RESET CLICKED ! ");
              var message = document.getElementById("message");
@@ -478,7 +482,6 @@ controller.on( 'frame' , function( frame ){
         break;
   }
 });
-
 /*
 Handling if the device gets disconnected in between.
 Also can withdraw fingers and start again seamlessly. 
