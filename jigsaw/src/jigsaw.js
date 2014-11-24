@@ -1,6 +1,6 @@
 //var puzzleBoardCo_ordinated = {  }
 var resetButton = {left: -300 , right: -100, top : -250, bottom: -175};
-
+var randomPuzzleButton = {left: -25 , right: 175, top : -250, bottom: -150};
 
 
 var canvas, canvasTest, ctx, ctxTest;
@@ -167,17 +167,11 @@ function randomGameChooser(){
 }
 
 function isGameChanger(){
-
-  var randomPuzzleLeft = -25;
-  var randomPuzzleRight = -25 + 200;
-  var randomPuzzleTop = -250;
-  var randomPuzzleBottom = -250 + 100;
-
   message = document.getElementById("message");
-  if(randomPuzzleRight >= currentCursorPosX
-      && randomPuzzleLeft <= currentCursorPosX
-      && randomPuzzleBottom >= currentCursorPosY
-      && randomPuzzleTop <= currentCursorPosY)
+  if(randomPuzzleButton["right"] >= currentCursorPosX
+      && randomPuzzleButton["left"] <= currentCursorPosX
+      && randomPuzzleButton["bottom"] >= currentCursorPosY
+      && randomPuzzleButton["top"] <= currentCursorPosY)
   {
       if(gameChangeFlag == 0 ){
           gameChangeFlag = 1;
