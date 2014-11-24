@@ -1,6 +1,6 @@
 //var puzzleBoardCo_ordinated = {  }
-var resetButton = {left: -300 , right: -100, top : -250, bottom: -175};
-var randomPuzzleButton = {left: -25 , right: 175, top : -250, bottom: -150};
+var resetButton = {left: -300 , right: -100, top : -250, bottom: -175, width : 200 , height : 75};
+var randomPuzzleButton = {left: -25 , right: 175, top : -250, bottom: -150, width : 200, height : 75};
 
 
 var canvas, canvasTest, ctx, ctxTest;
@@ -184,14 +184,14 @@ function isGameChanger(){
 }
 
 function drawButtons(){
-      ctxTest.rect(-300, -250,200,75);
+      ctxTest.rect(resetButton["left"], resetButton["top"],resetButton["width"],resetButton["height"]);
       ctxTest.lineWidth = 3;
       ctxTest.strokeStyle = "blue";
       ctxTest.stroke();
       ctxTest.font = "20px Arial";
       ctxTest.fillText("Reset Game",-275,-190);
 
-      ctxTest.rect(-25, -250,200,75);
+      ctxTest.rect(randomPuzzleButton["left"], randomPuzzleButton["top"],randomPuzzleButton["width"],randomPuzzleButton["height"]);
       ctxTest.lineWidth = 3;
       ctxTest.strokeStyle = "blue";
       ctxTest.stroke();
