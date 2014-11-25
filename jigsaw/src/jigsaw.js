@@ -9,6 +9,23 @@ var solutionBoardCo_ordinates = {topLeft_X : -252, topLeft_Y :-595,
                                  bottomRight_X : -60, bottomRight_Y : -475,
                                  bottomLeft_X: -252, bottomLeft_Y: -475 };
 
+
+var piece_right_top = { X: 0, Y : 0,
+                sourcePos: "rightTop" , destinationPos : "rightTop",
+                image : new Image()};
+
+var piece_left_top = { X: 0, Y : 0,
+                sourcePos: "leftTop", destinationPos : "leftTop",
+                image : new Image() };
+var piece_left_bottom = { X: 0, Y : 0,
+                sourcePos: "leftBottom", destinationPos:"leftBottom",
+                image : new Image()};
+
+var piece_right_bottom = { X: 0, Y : 0,
+                sourcePos: "rightBottom" , destinationPos : "rightBottom",
+                image : new Image() };
+
+
 var resetButton = {left: -300 , right: -100, top : -250, bottom: -175, width : 200 , height : 75};
 var randomPuzzleButton = {left: -25 , right: 175, top : -250, bottom: -150, width : 200, height : 75};
 var canvas, canvasTest, ctx, ctxTest;
@@ -20,24 +37,6 @@ var quadrant_clicked;
 var quandrant_loc_to_piece_map = { Q1:"rightTop" ,  Q2 : "leftTop" , Q3:"leftBottom" , Q4:"rightBottom"};
 var games = [ "Uncle_Scrooge_pieces", "fruits_pieces" ,  "lego_pieces" , "nemo_pieces"];
 var gameChangeFlag = 0;
-
-
-
-
-/*
-Used to remember the position of the piece on the canvas
-*/
-var piece_topLeft_X ;
-var piece_topLeft_Y;
-
-var piece_topRight_X;
-var piece_topRight_Y;
-
-var piece_bottomRight_X;
-var piece_bottomRight_Y;
-
-var piece_bottomLeft_X;
-var piece_bottomLeft_Y;
 var puzzle_tile_counter;
 
 function initGame(puzzleName){
@@ -71,33 +70,25 @@ function initGame(puzzleName){
       leftTop = new Image();
       leftTop.src = "/samplePuzzles/" + puzzleName + "/1.jpg";
       leftTop.style.display = "inline-block";
+      piece_left_top["image"] = leftTop;
 
       rightTop = new Image();
       rightTop.src = "/samplePuzzles/"+ puzzleName +"/2.jpg";
       rightTop.style.display = "inline-block";
+      piece_right_top["image"] = rightTop;
 
       leftBottom = new Image();
       leftBottom.src = "/samplePuzzles/"+ puzzleName +"/3.jpg";
       leftBottom.style.display = "inline-block";
+      piece_left_bottom["image"] = leftBottom;
 
       rightBottom = new Image();
       rightBottom.src = "/samplePuzzles/"+ puzzleName +"/4.jpg";
       rightBottom.style.display = "inline-block";
+      piece_right_bottom["image"] = rightBottom;
 
       keyTap = 0;
       quandrant_loc_to_piece_map = { Q1:"rightTop" ,  Q2 : "leftTop" , Q3:"leftBottom" , Q4:"rightBottom"};
-      piece_topLeft_X = 0;
-      piece_topLeft_Y = 0;
-
-      piece_topRight_X = 0;
-      piece_topRight_Y = 0;
-
-      piece_bottomRight_X = 0;
-      piece_bottomRight_Y = 0;
-
-      piece_bottomLeft_X = 0;
-      piece_bottomLeft_Y = 0;
-
       puzzle_tile_counter = 0;
       jumblePieces();
       drawButtons();
@@ -227,37 +218,37 @@ function jumblePieces(){
     ctxTest.drawImage(rightBottom, puzzleBoardCo_ordinated["topLeft_X"], puzzleBoardCo_ordinated["topLeft_Y"], piece_Dim["width"], piece_Dim["height"]);
     drawBordersToPieces(puzzleBoardCo_ordinated["topLeft_X"],puzzleBoardCo_ordinated["topLeft_Y"],"blue");
   }
-  piece_topLeft_X = puzzleBoardCo_ordinated["topLeft_X"];
-  piece_topLeft_Y = puzzleBoardCo_ordinated["topLeft_Y"];
   quandrant_loc_to_piece_map["Q2"] = "rightBottom";
+  piece_left_top["X"]= puzzleBoardCo_ordinated["topLeft_X"];
+  piece_left_top["Y"]= puzzleBoardCo_ordinated["topLeft_Y"];
+
 
   leftBottom.onload = function() {
     // right top position (Q1) holds leftBottom
     ctxTest.drawImage(leftBottom,  puzzleBoardCo_ordinated["topRight_X"], puzzleBoardCo_ordinated["topRight_Y"], piece_Dim["width"], piece_Dim["height"]);
    drawBordersToPieces(puzzleBoardCo_ordinated["topRight_X"],puzzleBoardCo_ordinated["topRight_Y"],"blue");
   }
-  piece_topRight_X = puzzleBoardCo_ordinated["topRight_X"];
-  piece_topRight_Y = puzzleBoardCo_ordinated["topRight_Y"];
   quandrant_loc_to_piece_map["Q1"] = "leftBottom";
+  piece_right_top["X"]= puzzleBoardCo_ordinated["topRight_X"];
+  piece_right_top["Y"]= puzzleBoardCo_ordinated["topRight_Y"];
 
   rightTop.onload = function() {
     // left bottom position(Q3) holds rightTop piece
     ctxTest.drawImage(rightTop, puzzleBoardCo_ordinated["bottomLeft_X"], puzzleBoardCo_ordinated["bottomLeft_Y"], piece_Dim["width"], piece_Dim["height"]);
     drawBordersToPieces(puzzleBoardCo_ordinated["bottomLeft_X"],puzzleBoardCo_ordinated["bottomLeft_Y"],"blue");
   }
-  piece_bottomLeft_X = puzzleBoardCo_ordinated["bottomLeft_X"];
-  piece_bottomLeft_Y = puzzleBoardCo_ordinated["bottomLeft_Y"];
   quandrant_loc_to_piece_map["Q3"] = "rightTop";
+  piece_left_bottom["X"] = puzzleBoardCo_ordinated["bottomLeft_X"];
+  piece_left_bottom["Y"] = puzzleBoardCo_ordinated["bottomLeft_Y"];
 
   leftTop.onload = function() {
     // right bottom position(Q4) holds leftTop piece
     ctxTest.drawImage(leftTop,puzzleBoardCo_ordinated["bottomRight_X"], puzzleBoardCo_ordinated["bottomRight_Y"], piece_Dim["width"], piece_Dim["height"]);
     drawBordersToPieces(puzzleBoardCo_ordinated["bottomRight_X"],puzzleBoardCo_ordinated["bottomRight_Y"],"blue");
   }
-  piece_bottomRight_X = puzzleBoardCo_ordinated["bottomRight_X"];
-  piece_bottomRight_Y = puzzleBoardCo_ordinated["bottomRight_Y"];
   quandrant_loc_to_piece_map["Q4"] = "leftTop";
-
+  piece_right_bottom["X"] = puzzleBoardCo_ordinated["bottomRight_X"];
+  piece_right_bottom["Y"] = puzzleBoardCo_ordinated["bottomRight_Y"];
 }
 
 function isSolutionBoardClicked(){
@@ -363,67 +354,107 @@ function drawPuzzleTiles(X, Y, imageSrc){
   if(imageSrc == "rightTop")
   {
     ctxTest.drawImage(rightTop, X, Y, piece_Dim["width"], piece_Dim["height"]);
-    piece_bottomLeft_X = X;
-    piece_bottomLeft_Y = Y;
-    ctxTest.drawImage(leftTop, piece_bottomRight_X, piece_bottomRight_Y, piece_Dim["width"], piece_Dim["height"])
-    ctxTest.drawImage(leftBottom, piece_topRight_X, piece_topRight_Y, piece_Dim["width"], piece_Dim["height"]);
+    piece_left_bottom["X"] = X;
+    piece_left_bottom["Y"] = Y;
+
+    ctxTest.drawImage(leftTop,
+                    piece_right_bottom["X"], piece_right_bottom["Y"],
+                    piece_Dim["width"], piece_Dim["height"]);
+
+     ctxTest.drawImage(leftBottom,
+                    piece_right_top["X"], piece_right_top["Y"],
+                    piece_Dim["width"], piece_Dim["height"]);
      // right bottom position(Q4) holds leftTop piece
-    ctxTest.drawImage(rightBottom,  piece_topLeft_X, piece_topLeft_Y, piece_Dim["width"], piece_Dim["height"]);
+    ctxTest.drawImage(rightBottom,
+                    piece_left_top["X"], piece_left_top["Y"],
+                    piece_Dim["width"], piece_Dim["height"]);
   }
   else if(imageSrc == "leftTop")
   {
     ctxTest.drawImage(leftTop, X, Y, piece_Dim["width"],piece_Dim["height"]);
-    piece_bottomRight_X = X;
-    piece_bottomRight_Y = Y;
-    ctxTest.drawImage(leftBottom, piece_topRight_X, piece_topRight_Y, piece_Dim["width"], piece_Dim["height"]);
+    piece_right_bottom["X"] = X;
+    piece_right_bottom["Y"] = Y;
+
+    ctxTest.drawImage(leftBottom,
+                      piece_right_top["X"], piece_right_top["Y"],
+                      piece_Dim["width"], piece_Dim["height"]);
     // right top position (Q1) holds leftBottom
-    ctxTest.drawImage(rightTop,  piece_bottomLeft_X, piece_bottomLeft_Y, piece_Dim["width"], piece_Dim["height"]);
+    ctxTest.drawImage(rightTop,
+                      piece_left_bottom["X"], piece_left_bottom["Y"],
+                      piece_Dim["width"], piece_Dim["height"]);
     // right bottom position(Q4) holds leftTop piece
-    ctxTest.drawImage(rightBottom,  piece_topLeft_X, piece_topLeft_Y, piece_Dim["width"], piece_Dim["height"]);
+    ctxTest.drawImage(rightBottom,
+                      piece_left_top["X"], piece_left_top["Y"],
+                      piece_Dim["width"], piece_Dim["height"]);
   }
   else if(imageSrc == "leftBottom")
   {
     ctxTest.drawImage(leftBottom, X, Y, piece_Dim["width"], piece_Dim["height"]);
-    piece_topRight_X = X;
-    piece_topRight_Y = Y;
-    ctxTest.drawImage(leftTop, piece_bottomRight_X, piece_bottomRight_Y, piece_Dim["width"], piece_Dim["height"]);
+    piece_right_top["X"] = X;
+    piece_right_top["Y"] = Y;
+
+    ctxTest.drawImage(leftTop,
+                      piece_right_bottom["X"], piece_right_bottom["Y"],
+                      piece_Dim["width"], piece_Dim["height"]);
     // right top position (Q1) holds leftBottom
-    ctxTest.drawImage(rightTop,  piece_bottomLeft_X, piece_bottomLeft_Y, piece_Dim["width"], piece_Dim["height"]);
+    ctxTest.drawImage(rightTop,
+                      piece_left_bottom["X"], piece_left_bottom["Y"],
+                      piece_Dim["width"], piece_Dim["height"]);
     // right bottom position(Q4) holds leftTop piece
-    ctxTest.drawImage(rightBottom,  piece_topLeft_X, piece_topLeft_Y, piece_Dim["width"], piece_Dim["height"]);
+    ctxTest.drawImage(rightBottom,
+                      piece_left_top["X"], piece_left_top["Y"],
+                      piece_Dim["width"], piece_Dim["height"]);
   }
   else if(imageSrc == "rightBottom")
   {
     ctxTest.drawImage(rightBottom, X, Y, piece_Dim["width"], piece_Dim["height"]);
-    piece_topLeft_X = X;
-    piece_topLeft_Y = Y;
-    ctxTest.drawImage(leftBottom, piece_topRight_X, piece_topRight_Y, piece_Dim["width"], piece_Dim["height"]);
-    ctxTest.drawImage(leftTop, piece_bottomRight_X, piece_bottomRight_Y, piece_Dim["width"], piece_Dim["height"]);
+    piece_left_top["X"] = X;
+    piece_left_top["Y"] = Y;
+
+    ctxTest.drawImage(leftBottom,
+                      piece_right_top["X"], piece_right_top["Y"],
+                      piece_Dim["width"], piece_Dim["height"]);
+
+    ctxTest.drawImage(leftTop,
+                      piece_right_bottom["X"], piece_right_bottom["Y"],
+                      piece_Dim["width"], piece_Dim["height"]);
     // right top position (Q1) holds leftBottom
-    ctxTest.drawImage(rightTop,  piece_bottomLeft_X, piece_bottomLeft_Y, piece_Dim["width"], piece_Dim["height"]);
+    ctxTest.drawImage(rightTop,
+                      piece_left_bottom["X"], piece_left_bottom["Y"],
+                      piece_Dim["width"], piece_Dim["height"]);
   }
 }
+
+
 function keepTileOnPuzzleBoard(img){
 
   if(img == "rightTop"){
-      piece_bottomLeft_X = puzzleBoardCo_ordinated["bottomLeft_X"];
-      piece_bottomLeft_Y = puzzleBoardCo_ordinated["bottomLeft_Y"];
-      ctxTest.drawImage(rightTop, piece_bottomLeft_X , piece_bottomLeft_Y, piece_Dim["width"], piece_Dim["height"]);
+      piece_left_bottom["X"] = puzzleBoardCo_ordinated["bottomLeft_X"];
+      piece_left_bottom["Y"] = puzzleBoardCo_ordinated["bottomLeft_Y"];
+      ctxTest.drawImage(rightTop,
+                        piece_left_bottom["X"] , piece_left_bottom[Y],
+                        piece_Dim["width"], piece_Dim["height"]);
   }
   else if(img == "rightBottom"){
-      piece_topLeft_X = puzzleBoardCo_ordinated["topLeft_X"];
-      piece_topLeft_Y = puzzleBoardCo_ordinated["topLeft_Y"];
-      ctxTest.drawImage(rightBottom, piece_topLeft_X , piece_topLeft_Y, piece_Dim["width"], piece_Dim["height"]);
+      piece_left_top["X"] = puzzleBoardCo_ordinated["topLeft_X"];
+      piece_left_top["Y"] = puzzleBoardCo_ordinated["topLeft_Y"];
+      ctxTest.drawImage(rightBottom,
+                        piece_left_top["X"] , piece_left_top["Y"],
+                        piece_Dim["width"], piece_Dim["height"]);
   }
   else if(img == "leftTop"){
-      piece_bottomRight_X = puzzleBoardCo_ordinated["bottomRight_X"];
-      piece_bottomRight_Y = puzzleBoardCo_ordinated["bottomRight_Y"];
-      ctxTest.drawImage(leftTop, piece_bottomRight_X , piece_bottomRight_Y, piece_Dim["width"], piece_Dim["height"]);
+       piece_right_bottom["X"]= puzzleBoardCo_ordinated["bottomRight_X"];
+      piece_right_bottom["Y"]= puzzleBoardCo_ordinated["bottomRight_Y"];
+      ctxTest.drawImage(leftTop,
+                        piece_right_bottom["X"],piece_right_bottom["Y"],
+                        piece_Dim["width"], piece_Dim["height"]);
   }
   else if(img == "leftBottom"){
-      piece_topRight_X = puzzleBoardCo_ordinated["topRight_X"];
-      piece_topRight_Y = puzzleBoardCo_ordinated["topRight_Y"];
-      ctxTest.drawImage(leftBottom, piece_bottomLeft_X , piece_bottomLeft_Y, piece_Dim["width"], piece_Dim["height"]);
+      piece_right_top["X"] = puzzleBoardCo_ordinated["topRight_X"];
+      piece_right_top["Y"] = puzzleBoardCo_ordinated["topRight_Y"];
+      ctxTest.drawImage(leftBottom,
+                        piece_left_bottom["X"] , piece_left_bottom["Y"],
+                        piece_Dim["width"], piece_Dim["height"]);
   }
 
 }
