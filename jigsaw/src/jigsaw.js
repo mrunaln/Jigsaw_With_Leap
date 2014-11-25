@@ -4,12 +4,13 @@ var puzzleBoardCo_ordinated = {topLeft_X: -662, topLeft_Y : -595,
                               bottomLeft_X: -662 , bottomLeft_Y: -475};
 
 piece_Dim = {width : 190 , height : 120};
-//var solutionBoardCo_ordinated = {topLeft_X : , topLeft_Y : , topRight_X, topRight_Y : , bottomRight_X : , bottomRight_Y : ,  bottomLeft_X: , bottomLeft_Y:  }
+var solutionBoardCo_ordinates = {topLeft_X : -252, topLeft_Y :-595,
+                                 topRight_X : -60, topRight_Y :-595,
+                                 bottomRight_X : -60, bottomRight_Y : -475,
+                                 bottomLeft_X: -252, bottomLeft_Y: -475 };
+
 var resetButton = {left: -300 , right: -100, top : -250, bottom: -175, width : 200 , height : 75};
 var randomPuzzleButton = {left: -25 , right: 175, top : -250, bottom: -150, width : 200, height : 75};
-
-
-
 var canvas, canvasTest, ctx, ctxTest;
 var puzzleName, leftTop, leftBottom,rightBottom,rightTop, keyTap;
 var currentCursorPosX;
@@ -341,17 +342,17 @@ function computeValueForWhichSideOfLine(Ax, Ay, Bx, By, Cx, Cy){
 function drawCurrentSolutionBoard(imageSrc){
     var solutionBoard_x, solutionBoard_y;
     if(imageSrc == "rightTop"){ // Q1
-        solutionBoard_x = -60;
-        solutionBoard_y = -595; // verified doing good
+        solutionBoard_x = solutionBoardCo_ordinates["topRight_X"];
+        solutionBoard_y = solutionBoardCo_ordinates["topRight_Y"]; // verified doing good
     }else if(imageSrc == "rightBottom"){ // Q4
-        solutionBoard_x = -60;
-        solutionBoard_y = -475; // verified doing good
+        solutionBoard_x = solutionBoardCo_ordinates["bottomRight_X"];
+        solutionBoard_y = solutionBoardCo_ordinates["bottomRight_Y"]; // verified doing good
     }else if(imageSrc == "leftTop"){ //Q2
-        solutionBoard_x = -252;
-        solutionBoard_y = -595; // verified
+        solutionBoard_x = solutionBoardCo_ordinates["topLeft_X"];
+        solutionBoard_y = solutionBoardCo_ordinates["topLeft_Y"]; // verified
     }else if(imageSrc == "leftBottom"){ // Q3
-        solutionBoard_x = -252;
-        solutionBoard_y = -475; // verified
+        solutionBoard_x = solutionBoardCo_ordinates["bottomLeft_X"];
+        solutionBoard_y = solutionBoardCo_ordinates["bottomLeft_Y"]; // verified
     }
     puzzle_tile_counter++;
     drawPuzzleTiles(solutionBoard_x,solutionBoard_y,imageSrc);
