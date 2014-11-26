@@ -490,6 +490,11 @@ function keepTileOnPuzzleBoard(img){
   }
 }
 
+
+function update_puzzle_status(msg){
+    $('#message').html("<span> " + msg + "</span>");
+}
+
 // Creates our Leap Controller
 var controller = new Leap.Controller({enableGestures:true});
 // Tells the controller what to do every time it sees a frame
@@ -513,8 +518,10 @@ controller.on( 'frame' , function( frame ){
               var yesOrNo = isSolutionBoardClicked();
               if(yesOrNo)
               {
+                  update_puzzle_status("You are doing great !");
                   drawCurrentSolutionBoard(quadrant_clicked);
               }else{ 
+                  update_puzzle_status("Opps wrong tile placement! ");
                   keepTileOnPuzzleBoard(quadrant_clicked);
               }
            }
@@ -524,6 +531,7 @@ controller.on( 'frame' , function( frame ){
               quadrant_clicked = identifyPieceSelectionOnKeytap();
               if(quadrant_clicked !== null)
               {
+                  update_puzzle_status("Cool .. Got a tile at hand!");
                   drawPuzzleTiles(currentCursorPosX, currentCursorPosY, quadrant_clicked);
               }
           }//if puzzleBoardClicked ends
