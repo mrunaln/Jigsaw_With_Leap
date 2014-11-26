@@ -292,11 +292,26 @@ function drawGrids(){
                     piece_Dim["width"] + 2 ,piece_Dim["height"] + 2);
       ctxGrid.stroke();
 
+
+      // extended solution board to click
+      ctxGrid.strokeStyle = "#D3D3D3";
+      ctxGrid.setLineDash([5,2]);
+      ctxGrid.rect(solutionBoardCo_ordinates["topLeft_X"] - 45,
+                   solutionBoardCo_ordinates["topLeft_Y"] - 25,
+                    470 ,290);
+                    // 470 = (190 + 190 + 45 + 45)
+                    // 290 = ( 120 + 120 + 25 + 25)
+      ctxGrid.stroke();
 }
 
 function isSolutionBoardClicked(){
+  /*
   if (currentCursorPosX > -350 && currentCursorPosY > -595
        && currentCursorPosX < 350 && currentCursorPosY < -355)
+  */
+
+  if (currentCursorPosX > -145 && currentCursorPosY > -620
+       && currentCursorPosX < 325 && currentCursorPosY < -330)
   {
     return true;
   }
