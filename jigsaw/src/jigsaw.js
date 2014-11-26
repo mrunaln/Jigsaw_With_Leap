@@ -5,16 +5,16 @@ var puzzleBoardCo_ordinated = {topLeft_X: -662, topLeft_Y : -595,
 
 var piece_Dim = {width : 190 , height : 120};
 
-var solutionBoardCo_ordinates = {topLeft_X : -252, topLeft_Y :-595,
-                                 topRight_X : -60, topRight_Y :-595,
-                                 bottomRight_X : -60, bottomRight_Y : -475,
-                                 bottomLeft_X: -252, bottomLeft_Y: -475 };
+var solutionBoardCo_ordinates = {topLeft_X : -100, topLeft_Y :-595,
+                                 topRight_X : 90, topRight_Y :-595,
+                                 bottomRight_X : 90, bottomRight_Y : -475,
+                                 bottomLeft_X: -100, bottomLeft_Y: -475 };
 var PuzzlePieces = {
   newInstance : function(srcPos, destPos)
   {
     return { x : 0, y : 0,
             sourcePos: srcPos, destinationPos: destPos,
-            image: new Image() }
+            image: new Image() };
   }
 }
 
@@ -33,7 +33,7 @@ var games = [ "Uncle_Scrooge_pieces",
               "lego_pieces",
               "nemo_pieces"];
 
-var canvas, canvasTest, ctx, ctxTest;
+var canvas, canvasTest, canvasGrid, ctx, ctxTest, ctxGrid;
 var puzzleName,keyTap;
 var currentCursorPosX;
 var currentCursorPosY;
@@ -70,9 +70,12 @@ function initGame(puzzleName){
       ctxTest.translate(canvasTest.width/2,canvasTest.height);
 
 
+
+
       ctx.clearRect(-canvas.width/2,-canvas.height,canvas.width,canvas.height);
-      ctx.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
-      
+      ctxTest.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
+      //ctxGrid.clearRect(-canvas.width/2,-canvas.height,canvas.width,canvas.height);
+
       piece_right_top = PuzzlePieces.newInstance("rightTop" , "rightTop");
       piece_left_top = PuzzlePieces.newInstance("leftTop", "leftTop");
       piece_left_bottom = PuzzlePieces.newInstance("leftBottom", "leftBottom");
@@ -100,6 +103,7 @@ function initGame(puzzleName){
       piece_right_bottom["image"] = rightBottom;
 
       keyTap = 0;
+      drawGrids();
       jumblePieces();
       drawButtons();
       gameChangeFlag = 0;
@@ -111,7 +115,6 @@ function jumblePieces(){
   piece_right_bottom["image"].onload = function() {
     // left top position(Q2) holds rightBottom piece
     ctxTest.drawImage(piece_right_bottom["image"], puzzleBoardCo_ordinated["topLeft_X"], puzzleBoardCo_ordinated["topLeft_Y"], piece_Dim["width"], piece_Dim["height"]);
-    drawBordersToPieces(puzzleBoardCo_ordinated["topLeft_X"],puzzleBoardCo_ordinated["topLeft_Y"],"blue");
   }
   piece_left_top["X"]= puzzleBoardCo_ordinated["topLeft_X"];
   piece_left_top["Y"]= puzzleBoardCo_ordinated["topLeft_Y"];
@@ -120,7 +123,6 @@ function jumblePieces(){
   piece_left_bottom["image"].onload = function() {
     // right top position (Q1) holds leftBottom
     ctxTest.drawImage(piece_left_bottom["image"],  puzzleBoardCo_ordinated["topRight_X"], puzzleBoardCo_ordinated["topRight_Y"], piece_Dim["width"], piece_Dim["height"]);
-   drawBordersToPieces(puzzleBoardCo_ordinated["topRight_X"],puzzleBoardCo_ordinated["topRight_Y"],"blue");
   }
   piece_right_top["X"]= puzzleBoardCo_ordinated["topRight_X"];
   piece_right_top["Y"]= puzzleBoardCo_ordinated["topRight_Y"];
@@ -129,7 +131,6 @@ function jumblePieces(){
   piece_right_top["image"].onload = function() {
     // left bottom position(Q3) holds rightTop piece
     ctxTest.drawImage(piece_right_top["image"], puzzleBoardCo_ordinated["bottomLeft_X"], puzzleBoardCo_ordinated["bottomLeft_Y"], piece_Dim["width"], piece_Dim["height"]);
-    drawBordersToPieces(puzzleBoardCo_ordinated["bottomLeft_X"],puzzleBoardCo_ordinated["bottomLeft_Y"],"blue");
   }
   piece_left_bottom["X"] = puzzleBoardCo_ordinated["bottomLeft_X"];
   piece_left_bottom["Y"] = puzzleBoardCo_ordinated["bottomLeft_Y"];
@@ -138,7 +139,6 @@ function jumblePieces(){
   piece_left_top["image"].onload = function() {
     // right bottom position(Q4) holds leftTop piece
     ctxTest.drawImage(piece_left_top["image"],puzzleBoardCo_ordinated["bottomRight_X"], puzzleBoardCo_ordinated["bottomRight_Y"], piece_Dim["width"], piece_Dim["height"]);
-    drawBordersToPieces(puzzleBoardCo_ordinated["bottomRight_X"],puzzleBoardCo_ordinated["bottomRight_Y"],"blue");
   }
   piece_right_bottom["X"] = puzzleBoardCo_ordinated["bottomRight_X"];
   piece_right_bottom["Y"] = puzzleBoardCo_ordinated["bottomRight_Y"];
@@ -226,6 +226,7 @@ function isGameChanger(){
 }
 
 function drawButtons(){
+
       ctxTest.rect(resetButton["left"], resetButton["top"],resetButton["width"],resetButton["height"]);
       ctxTest.lineWidth = 3;
       ctxTest.strokeStyle = "blue";
@@ -239,14 +240,49 @@ function drawButtons(){
       ctxTest.stroke();
       ctxTest.font = "20px Arial";
       ctxTest.fillText("Random Puzzle",20,-190);
+
 }
 
 
-function drawBordersToPieces(X, Y,color){
-      ctxTest.rect(X, Y,piece_Dim["width"] + 2 ,piece_Dim["height"] + 2);
-      ctxTest.lineWidth = 3;
-      ctxTest.strokeStyle = color;
-      ctxTest.stroke();
+function drawGrids(){
+
+      canvasGrid = document.getElementById("canvasGrid");
+      canvasGrid.width = window.innerWidth;
+      canvasGrid.height = window.innerHeight;
+      ctxGrid = canvasGrid.getContext("2d");
+      ctxGrid.translate(canvasGrid.width/2,canvasGrid.height);
+
+      ctxGrid.lineWidth = 3;
+      ctxGrid.strokeStyle = "blue";
+
+      //Draws puzzle board
+      ctxGrid.rect(puzzleBoardCo_ordinated["topLeft_X"], puzzleBoardCo_ordinated["topLeft_Y"],
+                    piece_Dim["width"] + 2 ,piece_Dim["height"]+2 );
+      ctxGrid.stroke();
+      ctxGrid.rect(puzzleBoardCo_ordinated["bottomLeft_X"], puzzleBoardCo_ordinated["bottomLeft_Y"],
+                    piece_Dim["width"] + 2 ,piece_Dim["height"] + 2);
+      ctxGrid.stroke();
+      ctxGrid.rect(puzzleBoardCo_ordinated["topRight_X"], puzzleBoardCo_ordinated["topRight_Y"],
+                    piece_Dim["width"] + 2 ,piece_Dim["height"] + 2);
+      ctxGrid.stroke();
+      ctxGrid.rect(puzzleBoardCo_ordinated["bottomRight_X"], puzzleBoardCo_ordinated["bottomRight_Y"],
+                    piece_Dim["width"] + 2 ,piece_Dim["height"] + 2);
+      ctxGrid.stroke();
+      //Draws solution board
+
+      ctxGrid.rect(solutionBoardCo_ordinates["topLeft_X"], solutionBoardCo_ordinates["topLeft_Y"],
+                    piece_Dim["width"] + 2 ,piece_Dim["height"] + 2);
+      ctxGrid.stroke();
+      ctxGrid.rect(solutionBoardCo_ordinates["bottomLeft_X"], solutionBoardCo_ordinates["bottomLeft_Y"],
+                    piece_Dim["width"] + 2 ,piece_Dim["height"] + 2);
+      ctxGrid.stroke();
+      ctxGrid.rect(solutionBoardCo_ordinates["topRight_X"], solutionBoardCo_ordinates["topRight_Y"],
+                    piece_Dim["width"] + 2 ,piece_Dim["height"] + 2);
+      ctxGrid.stroke();
+      ctxGrid.rect(solutionBoardCo_ordinates["bottomRight_X"], solutionBoardCo_ordinates["bottomRight_Y"],
+                    piece_Dim["width"] + 2 ,piece_Dim["height"] + 2);
+      ctxGrid.stroke();
+
 }
 
 function isSolutionBoardClicked(){
