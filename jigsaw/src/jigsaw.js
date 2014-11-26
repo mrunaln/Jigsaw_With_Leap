@@ -41,10 +41,8 @@ var canvas, canvasTest, ctx, ctxTest;
 var puzzleName,keyTap;
 var currentCursorPosX;
 var currentCursorPosY;
-var message;
 var quadrant_clicked;    
 var gameChangeFlag = 0;
-var puzzle_tile_counter;
 
 $(document).ready(function(){
   puzzleName = "Uncle_Scrooge_pieces";
@@ -107,7 +105,6 @@ function initGame(puzzleName){
 
       keyTap = 0;
       quandrant_loc_to_piece_map = { Q1:"rightTop" ,  Q2 : "leftTop" , Q3:"leftBottom" , Q4:"rightBottom"};
-      puzzle_tile_counter = 0;
       jumblePieces();
       drawButtons();
       gameChangeFlag = 0;
@@ -206,9 +203,6 @@ function isResetClicked(){
             && resetButton["top"] <= currentCursorPosY)
   {
             console.log("RESET CLICKED ! ");
-             var message = document.getElementById("message");
-             $('#message').html("<span> " + " Resetting the game </span>");
-
             return true;
   }
   return false;
@@ -226,7 +220,6 @@ function randomGameChooser(){
 }
 
 function isGameChanger(){
-  message = document.getElementById("message");
   if(randomPuzzleButton["right"] >= currentCursorPosX
       && randomPuzzleButton["left"] <= currentCursorPosX
       && randomPuzzleButton["bottom"] >= currentCursorPosY
@@ -235,7 +228,6 @@ function isGameChanger(){
       if(gameChangeFlag === 0 ){
           gameChangeFlag = 1;
           var random = randomGameChooser();
-          $('#message').html("<span> " + " Play "+ games[random-1] +" puzzle</span>");
           puzzleName = games[random-1];
           initGame(puzzleName);
       }
@@ -359,7 +351,6 @@ function drawCurrentSolutionBoard(imageSrc){
         solutionBoard_x = solutionBoardCo_ordinates["bottomLeft_X"];
         solutionBoard_y = solutionBoardCo_ordinates["bottomLeft_Y"]; // verified
     }
-    puzzle_tile_counter++;
     drawPuzzleTiles(solutionBoard_x,solutionBoard_y,imageSrc);
 }
 function drawPuzzleTiles(X, Y, imageSrc){
@@ -453,32 +444,23 @@ function keepTileOnPuzzleBoard(img){
   if(img === "rightTop"){
       piece_left_bottom["X"] = puzzleBoardCo_ordinated["bottomLeft_X"];
       piece_left_bottom["Y"] = puzzleBoardCo_ordinated["bottomLeft_Y"];
-      ctxTest.drawImage(piece_right_top["image"],
-                        piece_left_bottom["X"] , piece_left_bottom["Y"],
-                        piece_Dim["width"], piece_Dim["height"]);
+      drawPuzzleTiles(piece_left_bottom["X"], piece_left_bottom["Y"],piece_left_bottom["sourcePos"] );
   }
   else if(img === "rightBottom"){
       piece_left_top["X"] = puzzleBoardCo_ordinated["topLeft_X"];
       piece_left_top["Y"] = puzzleBoardCo_ordinated["topLeft_Y"];
-      ctxTest.drawImage(piece_right_bottom["image"],
-                        piece_left_top["X"] , piece_left_top["Y"],
-                        piece_Dim["width"], piece_Dim["height"]);
+      drawPuzzleTiles(piece_left_top["X"],piece_left_top["Y"],piece_left_top["sourcePos"]);
   }
   else if(img === "leftTop"){
       piece_right_bottom["X"]= puzzleBoardCo_ordinated["bottomRight_X"];
       piece_right_bottom["Y"]= puzzleBoardCo_ordinated["bottomRight_Y"];
-      ctxTest.drawImage(piece_left_top["image"],
-                        piece_right_bottom["X"],piece_right_bottom["Y"],
-                        piece_Dim["width"], piece_Dim["height"]);
+      drawPuzzleTiles(piece_right_bottom["X"],piece_right_bottom["Y"], piece_right_bottom["sourcePos"]);
   }
   else if(img === "leftBottom"){
       piece_right_top["X"] = puzzleBoardCo_ordinated["topRight_X"];
       piece_right_top["Y"] = puzzleBoardCo_ordinated["topRight_Y"];
-      ctxTest.drawImage(piece_left_bottom["image"],
-                        piece_left_bottom["X"] , piece_left_bottom["Y"],
-                        piece_Dim["width"], piece_Dim["height"]);
+      drawPuzzleTiles(piece_right_top["X"],piece_right_top["Y"],piece_right_top["sourcePos"]);
   }
-
 }
 
 // Creates our Leap Controller
@@ -506,19 +488,7 @@ controller.on( 'frame' , function( frame ){
               if(yesOrNo)
               {
                   drawCurrentSolutionBoard(quandrant_loc_to_piece_map[quadrant_clicked]);
-                  if(puzzle_tile_counter === 4){
-                    message = document.getElementById("message");
-                    $('#message').html("<span> " + "YAYYYY.. Puzzle Complete !" + "</span>");
-                    drawButtons();
-                  }else if(puzzle_tile_counter < 0){
-                    message = document.getElementById("message");
-                    $('#message').html("<span> " + "You are going great! " + (4 - puzzle_tile_counter) + " tiles to go !" + "</span>");
-                  }
-              }else{ // if the piece is not left inside the soln board then
-                    //put it back to puzzle board
-                  /* Thats a hack :( */
-                  ctxTest.fillStyle="#FFFFFF";
-                  ctxTest.fillRect(currentCursorPosX,currentCursorPosY,piece_Dim["width"],piece_Dim["height"]);
+              }else{ 
                   keepTileOnPuzzleBoard(quandrant_loc_to_piece_map[quadrant_clicked]);
               }
            }
