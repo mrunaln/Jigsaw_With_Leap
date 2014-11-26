@@ -467,7 +467,6 @@ function keepTileOnPuzzleBoard(img){
 var controller = new Leap.Controller({enableGestures:true});
 // Tells the controller what to do every time it sees a frame
 controller.on( 'frame' , function( frame ){
-  var prev_quadrant_clicked;
   if (isResetClicked()){
     initGame(puzzleName);
   }
@@ -495,7 +494,6 @@ controller.on( 'frame' , function( frame ){
            else if(isPuzzleBoardClicked())
            {
               //in the below func call the value of keyTap toggles on correct piece identification
-              prev_quadrant_clicked = quadrant_clicked;
               quadrant_clicked = identifyPieceSelectionOnKeytap();
               if(quadrant_clicked !== null &&
                 quandrant_loc_to_piece_map[quadrant_clicked] !== null)
