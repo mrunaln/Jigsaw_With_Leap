@@ -3,12 +3,12 @@ var puzzleBoardCo_ordinated = {topLeft_X: -662, topLeft_Y : -595,
                               bottomRight_X : -471, bottomRight_Y: -475,
                               bottomLeft_X: -662 , bottomLeft_Y: -475};
 
-piece_Dim = {width : 190 , height : 120};
+var piece_Dim = {width : 190 , height : 120};
+
 var solutionBoardCo_ordinates = {topLeft_X : -252, topLeft_Y :-595,
                                  topRight_X : -60, topRight_Y :-595,
                                  bottomRight_X : -60, bottomRight_Y : -475,
                                  bottomLeft_X: -252, bottomLeft_Y: -475 };
-
 var PuzzlePieces = {
   newInstance : function(srcPos, destPos)
   {
@@ -17,18 +17,32 @@ var PuzzlePieces = {
             image: new Image() }
   }
 }
+
 var piece_right_top, piece_left_top, piece_left_bottom, piece_right_bottom;
 
-var resetButton = {left: -300 , right: -100, top : -250, bottom: -175, width : 200 , height : 75};
-var randomPuzzleButton = {left: -25 , right: 175, top : -250, bottom: -150, width : 200, height : 75};
+var resetButton = {left: -300 , right: -100,
+                   top : -250, bottom: -175,
+                   width : 200 , height : 75};
+
+var randomPuzzleButton = {left: -25 , right: 175,
+                          top : -250, bottom: -150,
+                          width : 200, height : 75};
+
+var quandrant_loc_to_piece_map = { Q1:"rightTop",
+                                   Q2 : "leftTop",
+                                   Q3:"leftBottom",
+                                   Q4:"rightBottom"};
+var games = [ "Uncle_Scrooge_pieces",
+              "fruits_pieces",
+              "lego_pieces",
+              "nemo_pieces"];
+
 var canvas, canvasTest, ctx, ctxTest;
 var puzzleName,keyTap;
 var currentCursorPosX;
 var currentCursorPosY;
 var message;
-var quadrant_clicked;
-var quandrant_loc_to_piece_map = { Q1:"rightTop" ,  Q2 : "leftTop" , Q3:"leftBottom" , Q4:"rightBottom"};
-var games = [ "Uncle_Scrooge_pieces", "fruits_pieces" ,  "lego_pieces" , "nemo_pieces"];
+var quadrant_clicked;    
 var gameChangeFlag = 0;
 var puzzle_tile_counter;
 
@@ -144,10 +158,6 @@ function jumblePieces(){
 }
 
 
-
-
-
-
 // render each frame
 function drawCursor(obj)
 {
@@ -181,7 +191,7 @@ function drawCursor(obj)
         ctx.fill();
         currentCursorPosX = X;
         currentCursorPosY = Y;
-        if(keyTap == 1)
+        if(keyTap === 1)
         {
             ctxTest.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
             drawPuzzleTiles(currentCursorPosX, currentCursorPosY, quandrant_loc_to_piece_map[quadrant_clicked] );
@@ -202,7 +212,6 @@ function isResetClicked(){
             return true;
   }
   return false;
-
 }
 
 function randomGameChooser(){
@@ -223,7 +232,7 @@ function isGameChanger(){
       && randomPuzzleButton["bottom"] >= currentCursorPosY
       && randomPuzzleButton["top"] <= currentCursorPosY)
   {
-      if(gameChangeFlag == 0 ){
+      if(gameChangeFlag === 0 ){
           gameChangeFlag = 1;
           var random = randomGameChooser();
           $('#message').html("<span> " + " Play "+ games[random-1] +" puzzle</span>");
@@ -257,10 +266,6 @@ function drawBordersToPieces(X, Y,color){
       ctxTest.stroke();
 }
 
-
-
-
-
 function isSolutionBoardClicked(){
   if (currentCursorPosX > -350 && currentCursorPosY > -595
        && currentCursorPosX < 350 && currentCursorPosY < -355)
@@ -269,7 +274,6 @@ function isSolutionBoardClicked(){
   }
   return false;
 }
-
 
 function isPuzzleBoardClicked(){
   if (currentCursorPosX > -662 && currentCursorPosY > -595
@@ -342,16 +346,16 @@ function computeValueForWhichSideOfLine(Ax, Ay, Bx, By, Cx, Cy){
 
 function drawCurrentSolutionBoard(imageSrc){
     var solutionBoard_x, solutionBoard_y;
-    if(imageSrc == "rightTop"){ // Q1
+    if(imageSrc === "rightTop"){ // Q1
         solutionBoard_x = solutionBoardCo_ordinates["topRight_X"];
         solutionBoard_y = solutionBoardCo_ordinates["topRight_Y"]; // verified doing good
-    }else if(imageSrc == "rightBottom"){ // Q4
+    }else if(imageSrc === "rightBottom"){ // Q4
         solutionBoard_x = solutionBoardCo_ordinates["bottomRight_X"];
         solutionBoard_y = solutionBoardCo_ordinates["bottomRight_Y"]; // verified doing good
-    }else if(imageSrc == "leftTop"){ //Q2
+    }else if(imageSrc === "leftTop"){ //Q2
         solutionBoard_x = solutionBoardCo_ordinates["topLeft_X"];
         solutionBoard_y = solutionBoardCo_ordinates["topLeft_Y"]; // verified
-    }else if(imageSrc == "leftBottom"){ // Q3
+    }else if(imageSrc === "leftBottom"){ // Q3
         solutionBoard_x = solutionBoardCo_ordinates["bottomLeft_X"];
         solutionBoard_y = solutionBoardCo_ordinates["bottomLeft_Y"]; // verified
     }
@@ -361,9 +365,11 @@ function drawCurrentSolutionBoard(imageSrc){
 function drawPuzzleTiles(X, Y, imageSrc){
 
   ctxTest.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
-  if(imageSrc == "rightTop")
+  if(imageSrc === "rightTop")
   {
-    ctxTest.drawImage(piece_right_top["image"], X, Y, piece_Dim["width"], piece_Dim["height"]);
+    ctxTest.drawImage(piece_right_top["image"],
+                      X, Y,
+                      piece_Dim["width"], piece_Dim["height"]);
     piece_left_bottom["X"] = X;
     piece_left_bottom["Y"] = Y;
 
@@ -379,9 +385,11 @@ function drawPuzzleTiles(X, Y, imageSrc){
                     piece_left_top["X"], piece_left_top["Y"],
                     piece_Dim["width"], piece_Dim["height"]);
   }
-  else if(imageSrc == "leftTop")
+  else if(imageSrc === "leftTop")
   {
-    ctxTest.drawImage(piece_left_top["image"], X, Y, piece_Dim["width"],piece_Dim["height"]);
+    ctxTest.drawImage(piece_left_top["image"],
+                      X, Y,
+                      piece_Dim["width"],piece_Dim["height"]);
     piece_right_bottom["X"] = X;
     piece_right_bottom["Y"] = Y;
 
@@ -397,9 +405,11 @@ function drawPuzzleTiles(X, Y, imageSrc){
                       piece_left_top["X"], piece_left_top["Y"],
                       piece_Dim["width"], piece_Dim["height"]);
   }
-  else if(imageSrc == "leftBottom")
+  else if(imageSrc === "leftBottom")
   {
-    ctxTest.drawImage(piece_left_bottom["image"], X, Y, piece_Dim["width"], piece_Dim["height"]);
+    ctxTest.drawImage(piece_left_bottom["image"],
+                      X, Y,
+                      piece_Dim["width"], piece_Dim["height"]);
     piece_right_top["X"] = X;
     piece_right_top["Y"] = Y;
 
@@ -415,9 +425,11 @@ function drawPuzzleTiles(X, Y, imageSrc){
                       piece_left_top["X"], piece_left_top["Y"],
                       piece_Dim["width"], piece_Dim["height"]);
   }
-  else if(imageSrc == "rightBottom")
+  else if(imageSrc === "rightBottom")
   {
-    ctxTest.drawImage(piece_right_bottom["image"], X, Y, piece_Dim["width"], piece_Dim["height"]);
+    ctxTest.drawImage(piece_right_bottom["image"],
+                      X, Y,
+                      piece_Dim["width"], piece_Dim["height"]);
     piece_left_top["X"] = X;
     piece_left_top["Y"] = Y;
 
@@ -438,28 +450,28 @@ function drawPuzzleTiles(X, Y, imageSrc){
 
 function keepTileOnPuzzleBoard(img){
 
-  if(img == "rightTop"){
+  if(img === "rightTop"){
       piece_left_bottom["X"] = puzzleBoardCo_ordinated["bottomLeft_X"];
       piece_left_bottom["Y"] = puzzleBoardCo_ordinated["bottomLeft_Y"];
       ctxTest.drawImage(piece_right_top["image"],
                         piece_left_bottom["X"] , piece_left_bottom["Y"],
                         piece_Dim["width"], piece_Dim["height"]);
   }
-  else if(img == "rightBottom"){
+  else if(img === "rightBottom"){
       piece_left_top["X"] = puzzleBoardCo_ordinated["topLeft_X"];
       piece_left_top["Y"] = puzzleBoardCo_ordinated["topLeft_Y"];
       ctxTest.drawImage(piece_right_bottom["image"],
                         piece_left_top["X"] , piece_left_top["Y"],
                         piece_Dim["width"], piece_Dim["height"]);
   }
-  else if(img == "leftTop"){
+  else if(img === "leftTop"){
       piece_right_bottom["X"]= puzzleBoardCo_ordinated["bottomRight_X"];
       piece_right_bottom["Y"]= puzzleBoardCo_ordinated["bottomRight_Y"];
       ctxTest.drawImage(piece_left_top["image"],
                         piece_right_bottom["X"],piece_right_bottom["Y"],
                         piece_Dim["width"], piece_Dim["height"]);
   }
-  else if(img == "leftBottom"){
+  else if(img === "leftBottom"){
       piece_right_top["X"] = puzzleBoardCo_ordinated["topRight_X"];
       piece_right_top["Y"] = puzzleBoardCo_ordinated["topRight_Y"];
       ctxTest.drawImage(piece_left_bottom["image"],
@@ -486,7 +498,7 @@ controller.on( 'frame' , function( frame ){
       case "screenTap":
       case "keyTap":
            console.log ("KEY TAP = " + keyTap);
-           if(keyTap == 1)
+           if(keyTap === 1)
            {
               // Resetting keyTap to keep the puzzle piece at the curr pos
               keyTap = 0;
@@ -494,7 +506,7 @@ controller.on( 'frame' , function( frame ){
               if(yesOrNo)
               {
                   drawCurrentSolutionBoard(quandrant_loc_to_piece_map[quadrant_clicked]);
-                  if(puzzle_tile_counter == 4){
+                  if(puzzle_tile_counter === 4){
                     message = document.getElementById("message");
                     $('#message').html("<span> " + "YAYYYY.. Puzzle Complete !" + "</span>");
                     drawButtons();
@@ -515,8 +527,8 @@ controller.on( 'frame' , function( frame ){
               //in the below func call the value of keyTap toggles on correct piece identification
               prev_quadrant_clicked = quadrant_clicked;
               quadrant_clicked = identifyPieceSelectionOnKeytap();
-              if(quadrant_clicked != null &&
-                quandrant_loc_to_piece_map[quadrant_clicked] != null)
+              if(quadrant_clicked !== null &&
+                quandrant_loc_to_piece_map[quadrant_clicked] !== null)
               {
                   drawPuzzleTiles(currentCursorPosX, currentCursorPosY, quandrant_loc_to_piece_map[quadrant_clicked] );
               }
