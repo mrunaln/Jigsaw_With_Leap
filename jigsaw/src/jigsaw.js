@@ -242,8 +242,17 @@ function drawButtons(){
       ctxTest.fillText("Random Puzzle",20,-190);
 
 }
-
-
+/*
+function drawBorder(X,Y){
+  ctxGrid.clearRect(-canvasGrid.width/2,-canvasGrid.height,canvasGrid.width,canvasGrid.height);
+  ctxGrid.lineWidth = 3;
+  ctxGrid.strokeStyle = "red";
+  ctxGrid.rect( X, Y,
+               piece_Dim["width"] + 2 ,piece_Dim["height"]+2 );
+  ctxGrid.stroke();
+  drawGrids();
+}
+*/
 function drawGrids(){
 
       canvasGrid = document.getElementById("canvasGrid");
@@ -256,11 +265,11 @@ function drawGrids(){
       ctxGrid.strokeStyle = "blue";
 
       //Draws puzzle board
-      ctxGrid.rect(puzzleBoardCo_ordinated["topLeft_X"], puzzleBoardCo_ordinated["topLeft_Y"],
-                    piece_Dim["width"] + 2 ,piece_Dim["height"]+2 );
+      ctxGrid.rect(puzzleBoardCo_ordinated["topLeft_X"] + 15, puzzleBoardCo_ordinated["topLeft_Y"],
+                    piece_Dim["width"] -15,piece_Dim["height"]);
       ctxGrid.stroke();
-      ctxGrid.rect(puzzleBoardCo_ordinated["bottomLeft_X"], puzzleBoardCo_ordinated["bottomLeft_Y"],
-                    piece_Dim["width"] + 2 ,piece_Dim["height"] + 2);
+      ctxGrid.rect(puzzleBoardCo_ordinated["bottomLeft_X"] + 15, puzzleBoardCo_ordinated["bottomLeft_Y"],
+                    piece_Dim["width"] - 15,piece_Dim["height"]);
       ctxGrid.stroke();
       ctxGrid.rect(puzzleBoardCo_ordinated["topRight_X"], puzzleBoardCo_ordinated["topRight_Y"],
                     piece_Dim["width"] + 2 ,piece_Dim["height"] + 2);
@@ -383,6 +392,7 @@ function drawCurrentSolutionBoard(imageSrc){
 function drawPuzzleTiles(X, Y, imageSrc){
 
   ctxTest.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
+  
   if(imageSrc === "rightTop")
   {
     ctxTest.drawImage(piece_right_top["image"],
