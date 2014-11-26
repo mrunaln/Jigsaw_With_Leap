@@ -14,6 +14,7 @@ var PuzzlePieces = {
   {
     return { x : 0, y : 0,
             sourcePos: srcPos, destinationPos: destPos,
+            reachedDest : 0,
             image: new Image() };
   }
 }
@@ -390,15 +391,19 @@ function computeValueForWhichSideOfLine(Ax, Ay, Bx, By, Cx, Cy){
 function drawCurrentSolutionBoard(imageSrc){
     var solutionBoard_x, solutionBoard_y;
     if(imageSrc === "rightTop"){ // Q1
+        piece_right_top["reachedDest"] = 1;
         solutionBoard_x = solutionBoardCo_ordinates["topRight_X"];
         solutionBoard_y = solutionBoardCo_ordinates["topRight_Y"]; // verified doing good
     }else if(imageSrc === "rightBottom"){ // Q4
+        piece_right_bottom["reachedDest"] = 1;
         solutionBoard_x = solutionBoardCo_ordinates["bottomRight_X"];
         solutionBoard_y = solutionBoardCo_ordinates["bottomRight_Y"]; // verified doing good
     }else if(imageSrc === "leftTop"){ //Q2
+        piece_left_top["reachedDest"] = 1;
         solutionBoard_x = solutionBoardCo_ordinates["topLeft_X"];
         solutionBoard_y = solutionBoardCo_ordinates["topLeft_Y"]; // verified
     }else if(imageSrc === "leftBottom"){ // Q3
+        piece_left_bottom["reachedDest"] = 1;
         solutionBoard_x = solutionBoardCo_ordinates["bottomLeft_X"];
         solutionBoard_y = solutionBoardCo_ordinates["bottomLeft_Y"]; // verified
     }
@@ -516,6 +521,20 @@ function keepTileOnPuzzleBoard(img){
 }
 
 
+function isGameOver(){
+  if(piece_right_bottom["reachedDest"] && piece_right_top["reachedDest"] && piece_left_bottom["reachedDest"] && piece_left_top["reachedDest"]){
+    ctxGrid.strokeStyle = "#FFFFFF";
+    ctxGrid.setLineDash([5,2]);
+    ctxGrid.rect(solutionBoardCo_ordinates["topLeft_X"] - 45,
+                   solutionBoardCo_ordinates["topLeft_Y"] - 25,
+                    470 ,290);
+    ctxGrid.stroke();
+    drawButtons();
+    return true;
+  }
+return false;
+}
+
 function update_puzzle_status(msg){
     $('#message').html("<span> " + msg + "</span>");
 }
@@ -543,8 +562,12 @@ controller.on( 'frame' , function( frame ){
               var yesOrNo = isSolutionBoardClicked();
               if(yesOrNo)
               {
-                  update_puzzle_status("You are doing great !");
                   drawCurrentSolutionBoard(quadrant_clicked);
+                  if(isGameOver()){
+                      update_puzzle_status("Yayy ! Game over !");
+                  }else{
+                      update_puzzle_status("You are doing great !");
+                  }
               }else{ 
                   update_puzzle_status("Opps wrong tile placement! ");
                   keepTileOnPuzzleBoard(quadrant_clicked);
