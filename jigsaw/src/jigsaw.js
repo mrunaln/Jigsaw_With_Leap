@@ -28,10 +28,6 @@ var randomPuzzleButton = {left: -25 , right: 175,
                           top : -250, bottom: -150,
                           width : 200, height : 75};
 
-var quandrant_loc_to_piece_map = { Q1:"rightTop",
-                                   Q2 : "leftTop",
-                                   Q3:"leftBottom",
-                                   Q4:"rightBottom"};
 var games = [ "Uncle_Scrooge_pieces",
               "fruits_pieces",
               "lego_pieces",
@@ -104,7 +100,6 @@ function initGame(puzzleName){
       piece_right_bottom["image"] = rightBottom;
 
       keyTap = 0;
-      quandrant_loc_to_piece_map = { Q1:"rightTop" ,  Q2 : "leftTop" , Q3:"leftBottom" , Q4:"rightBottom"};
       jumblePieces();
       drawButtons();
       gameChangeFlag = 0;
@@ -118,7 +113,6 @@ function jumblePieces(){
     ctxTest.drawImage(piece_right_bottom["image"], puzzleBoardCo_ordinated["topLeft_X"], puzzleBoardCo_ordinated["topLeft_Y"], piece_Dim["width"], piece_Dim["height"]);
     drawBordersToPieces(puzzleBoardCo_ordinated["topLeft_X"],puzzleBoardCo_ordinated["topLeft_Y"],"blue");
   }
-  quandrant_loc_to_piece_map["Q2"] = "rightBottom";
   piece_left_top["X"]= puzzleBoardCo_ordinated["topLeft_X"];
   piece_left_top["Y"]= puzzleBoardCo_ordinated["topLeft_Y"];
   piece_left_top["sourcePos"] = "rightBottom";
@@ -128,7 +122,6 @@ function jumblePieces(){
     ctxTest.drawImage(piece_left_bottom["image"],  puzzleBoardCo_ordinated["topRight_X"], puzzleBoardCo_ordinated["topRight_Y"], piece_Dim["width"], piece_Dim["height"]);
    drawBordersToPieces(puzzleBoardCo_ordinated["topRight_X"],puzzleBoardCo_ordinated["topRight_Y"],"blue");
   }
-  quandrant_loc_to_piece_map["Q1"] = "leftBottom";
   piece_right_top["X"]= puzzleBoardCo_ordinated["topRight_X"];
   piece_right_top["Y"]= puzzleBoardCo_ordinated["topRight_Y"];
   piece_right_top["sourcePos"] = "leftBottom";
@@ -138,7 +131,6 @@ function jumblePieces(){
     ctxTest.drawImage(piece_right_top["image"], puzzleBoardCo_ordinated["bottomLeft_X"], puzzleBoardCo_ordinated["bottomLeft_Y"], piece_Dim["width"], piece_Dim["height"]);
     drawBordersToPieces(puzzleBoardCo_ordinated["bottomLeft_X"],puzzleBoardCo_ordinated["bottomLeft_Y"],"blue");
   }
-  quandrant_loc_to_piece_map["Q3"] = "rightTop";
   piece_left_bottom["X"] = puzzleBoardCo_ordinated["bottomLeft_X"];
   piece_left_bottom["Y"] = puzzleBoardCo_ordinated["bottomLeft_Y"];
   piece_left_bottom["sourcePos"] = "rightTop";
@@ -148,7 +140,6 @@ function jumblePieces(){
     ctxTest.drawImage(piece_left_top["image"],puzzleBoardCo_ordinated["bottomRight_X"], puzzleBoardCo_ordinated["bottomRight_Y"], piece_Dim["width"], piece_Dim["height"]);
     drawBordersToPieces(puzzleBoardCo_ordinated["bottomRight_X"],puzzleBoardCo_ordinated["bottomRight_Y"],"blue");
   }
-  quandrant_loc_to_piece_map["Q4"] = "leftTop";
   piece_right_bottom["X"] = puzzleBoardCo_ordinated["bottomRight_X"];
   piece_right_bottom["Y"] = puzzleBoardCo_ordinated["bottomRight_Y"];
   piece_right_bottom["sourcePos"] = "leftTop";
@@ -191,7 +182,7 @@ function drawCursor(obj)
         if(keyTap === 1)
         {
             ctxTest.clearRect(-canvasTest.width/2,-canvasTest.height,canvasTest.width,canvasTest.height);
-            drawPuzzleTiles(currentCursorPosX, currentCursorPosY, quandrant_loc_to_piece_map[quadrant_clicked] );
+            drawPuzzleTiles(currentCursorPosX, currentCursorPosY,quadrant_clicked);
         }
   }
 };
@@ -304,11 +295,11 @@ function identifyPieceSelectionOnKeytap(){
       if(value < 0){
           //console.log ( "R I G H T - A B O V E "); // Quadrant 1
           keyTap = 1;
-          return "Q1";
+          return piece_right_top["sourcePos"];
       }else{
           //console.log (" R I G H T - B E L O W");  // Quadrant 4
           keyTap = 1;
-          return "Q4";
+          return piece_right_bottom["sourcePos"];
       }
   }else{
       //console.log ("L E F T  side of verticle axis");
@@ -320,11 +311,11 @@ function identifyPieceSelectionOnKeytap(){
       if(value < 0){
           //console.log ("L E F T - B E L O W"); // Quadrant 3
           keyTap = 1;
-          return "Q3";
+          return piece_left_bottom["sourcePos"];
       }else{
           //console.log ( "L E F T - A B O V E "); // Quadrant 2
           keyTap = 1;
-          return "Q2";
+          return piece_left_top["sourcePos"];
       }
   }
   return null;
@@ -486,19 +477,18 @@ controller.on( 'frame' , function( frame ){
               var yesOrNo = isSolutionBoardClicked();
               if(yesOrNo)
               {
-                  drawCurrentSolutionBoard(quandrant_loc_to_piece_map[quadrant_clicked]);
+                  drawCurrentSolutionBoard(quadrant_clicked);
               }else{ 
-                  keepTileOnPuzzleBoard(quandrant_loc_to_piece_map[quadrant_clicked]);
+                  keepTileOnPuzzleBoard(quadrant_clicked);
               }
            }
            else if(isPuzzleBoardClicked())
            {
               //in the below func call the value of keyTap toggles on correct piece identification
               quadrant_clicked = identifyPieceSelectionOnKeytap();
-              if(quadrant_clicked !== null &&
-                quandrant_loc_to_piece_map[quadrant_clicked] !== null)
+              if(quadrant_clicked !== null)
               {
-                  drawPuzzleTiles(currentCursorPosX, currentCursorPosY, quandrant_loc_to_piece_map[quadrant_clicked] );
+                  drawPuzzleTiles(currentCursorPosX, currentCursorPosY, quadrant_clicked);
               }
           }//if puzzleBoardClicked ends
         }//else of isJumbleButtonClicked ends here
