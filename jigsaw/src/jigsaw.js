@@ -218,6 +218,7 @@ function isGameChanger(){
       && randomPuzzleButton["top"] <= currentCursorPosY)
   {
       if(gameChangeFlag === 0 ){
+          update_puzzle_status("Play new random game!");
           gameChangeFlag = 1;
           var random = randomGameChooser();
           puzzleName = games[random-1];
@@ -292,17 +293,6 @@ function drawGrids(){
       ctxGrid.rect(solutionBoardCo_ordinates["bottomRight_X"], solutionBoardCo_ordinates["bottomRight_Y"],
                     piece_Dim["width"] + 2 ,piece_Dim["height"] + 2);
       ctxGrid.stroke();
-
-
-      // extended solution board to click
-      ctxGrid.strokeStyle = "#D3D3D3";
-      ctxGrid.setLineDash([5,2]);
-      ctxGrid.rect(solutionBoardCo_ordinates["topLeft_X"] - 45,
-                   solutionBoardCo_ordinates["topLeft_Y"] - 25,
-                    470 ,290);
-                    // 470 = (190 + 190 + 45 + 45)
-                    // 290 = ( 120 + 120 + 25 + 25)
-      ctxGrid.stroke();
 }
 
 function isSolutionBoardClicked(){
@@ -353,11 +343,11 @@ function identifyPieceSelectionOnKeytap(){
       horizLine_Y_right = -475;
       value = computeValueForWhichSideOfLine(horizLine_X_left ,horizLine_Y_left, horizLine_X_right, horizLine_Y_right ,currentCursorPosX, currentCursorPosY);
 
-      if(value < 0){
+      if(value < 0 && piece_left_bottom["reachedDest"] === 0){
           //console.log ( "R I G H T - A B O V E "); // Quadrant 1
           keyTap = 1;
           return piece_right_top["sourcePos"];
-      }else{
+      }else if(value > 0 && piece_left_top["reachedDest"] === 0 ){
           //console.log (" R I G H T - B E L O W");  // Quadrant 4
           keyTap = 1;
           return piece_right_bottom["sourcePos"];
@@ -369,16 +359,17 @@ function identifyPieceSelectionOnKeytap(){
       horizLine_X_right = -321;
       horizLine_Y_right = -475;
       value = computeValueForWhichSideOfLine(horizLine_X_right , horizLine_Y_right, horizLine_X_left, horizLine_Y_left, currentCursorPosX, currentCursorPosY);
-      if(value < 0){
+      if(value < 0 && piece_right_top["reachedDest"] === 0){
           //console.log ("L E F T - B E L O W"); // Quadrant 3
           keyTap = 1;
           return piece_left_bottom["sourcePos"];
-      }else{
+      }else if (value > 0 && piece_right_bottom["reachedDest"] === 0){
           //console.log ( "L E F T - A B O V E "); // Quadrant 2
           keyTap = 1;
           return piece_left_top["sourcePos"];
       }
   }
+  keyTap = 0;
   return null;
 }
 
@@ -543,21 +534,44 @@ function update_puzzle_status(msg){
 var controller = new Leap.Controller({enableGestures:true});
 // Tells the controller what to do every time it sees a frame
 controller.on( 'frame' , function( frame ){
-  if (isResetClicked()){
-    initGame(puzzleName);
-  }
-  isGameChanger();
+
   drawCursor(frame);
   for( var i = 0; i < frame.gestures.length; i++ ){
-    var gesture = frame.gestures[i];
-    switch(gesture.type)
-    {
-      case "screenTap":
-      case "keyTap":
-           console.log ("KEY TAP = " + keyTap);
-           if(keyTap === 1)
-           {
-              // Resetting keyTap to keep the puzzle piece at the curr pos
+      var gesture = frame.gestures[i];
+      switch(gesture.type)
+      {
+        case "screenTap":
+        case "keyTap":
+            if (isResetClicked()){
+              update_puzzle_status("Reset Pressed, Play again !");
+              initGame(puzzleName);
+            }
+            isGameChanger();
+            break;
+      }
+  }
+  if(frame.hands.length > 0)
+      {
+        var hand = frame.hands[0];
+        console.log(" keyTap- " + keyTap);
+        if(hand.indexFinger.valid && hand.thumb.valid)
+        {
+          //console.log("index and thumb");
+        }
+        if(hand.grabStrength > 0.25 && isPuzzleBoardClicked() && keyTap === 0)
+        {
+          quadrant_clicked = identifyPieceSelectionOnKeytap();
+          console.log("Grabbed - quadrant = " + quadrant_clicked);
+              if(quadrant_clicked !== null)
+              {
+                  update_puzzle_status("Cool .. Got a tile at hand!");
+                  drawPuzzleTiles(currentCursorPosX, currentCursorPosY, quadrant_clicked);
+              }else{
+                console.log("quadrant clicked null ");
+              }
+        }//grabstr > 0.25 && puzzleboard clicked ends here
+        else if(keyTap && hand.grabStrength < 0.25)
+        {
               keyTap = 0;
               var yesOrNo = isSolutionBoardClicked();
               if(yesOrNo)
@@ -571,21 +585,9 @@ controller.on( 'frame' , function( frame ){
               }else{ 
                   update_puzzle_status("Opps wrong tile placement! ");
                   keepTileOnPuzzleBoard(quadrant_clicked);
-              }
-           }
-           else if(isPuzzleBoardClicked())
-           {
-              //in the below func call the value of keyTap toggles on correct piece identification
-              quadrant_clicked = identifyPieceSelectionOnKeytap();
-              if(quadrant_clicked !== null)
-              {
-                  update_puzzle_status("Cool .. Got a tile at hand!");
-                  drawPuzzleTiles(currentCursorPosX, currentCursorPosY, quadrant_clicked);
-              }
-          }//if puzzleBoardClicked ends
-        }//else of isJumbleButtonClicked ends here
-        break;
-  }
+              }   
+        } 
+      }//hands.length > 0 ends
 });
 /*
 Handling if the device gets disconnected in between.
